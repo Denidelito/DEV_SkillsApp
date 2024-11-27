@@ -11,4 +11,4 @@ server/.env
 .DS_Store
 
 .vscode/
-.ide/
+.idea/
