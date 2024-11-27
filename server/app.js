@@ -1,17 +1,11 @@
 const express = require('express');
 const app = express();
-const apiRoutes = require('./routes/api');
-const authRoutes = require('./routes/authRoutes');
+const apiRoutes= require("./routes")
 require('dotenv').config();
 
-// Middleware для парсинга JSON тела запроса
 app.use(express.json());
-
-// Подключаем маршруты
 app.use('/api', apiRoutes);
-app.use('/auth', authRoutes);
 
-// Указываем порт
 const PORT = process.env.PORT || 3000;
 
 // Запускаем сервер
