@@ -1,15 +1,15 @@
 const express = require('express');
 const app = express();
+const db = require('./config/db');
+const apiRoutes = require('./routes/api');
+require('dotenv').config();
 
-// Базовый роут
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
+app.use(express.json());
 
-// Указываем порт
+app.use('/api', apiRoutes);
+
 const PORT = process.env.PORT || 3000;
 
-// Запускаем сервер
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
