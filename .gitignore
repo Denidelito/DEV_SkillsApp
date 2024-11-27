@@ -1,0 +1,12 @@
+server/node_modules/
+
+*.log
+
+/tmp
+
+.env
+
+.DS_Store
+
+.vscode/
+.ide/
