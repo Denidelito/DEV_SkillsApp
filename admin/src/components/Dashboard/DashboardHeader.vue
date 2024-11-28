@@ -13,7 +13,7 @@ const logout = () => {
 
 <template>
   <div class="dashboard-header">
-    <div>Welcome to the Dashboard</div>
+    <div>Панель администратора</div>
     <div>
       <button class="btn" @click="logout">Logout</button>
     </div>
