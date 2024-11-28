@@ -5,10 +5,16 @@ import UsersAdd from "../components/UsersAdd.vue";
 
 <template>
   <h1>users</h1>
-  <users-add/>
-  <users-list/>
+
+  <div class="row">
+    <users-list/>
+    <users-add/>
+  </div>
 </template>
 
 <style scoped>
-
+  .row {
+    display: flex;
+    gap: 30px;
+  }
 </style>
