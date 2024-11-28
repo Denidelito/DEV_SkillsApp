@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+import axios from '../axios';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', {
             this.errorMessage = '';
 
             try {
-                const response = await axios.post('http://localhost:3000/auth/login', {
+                const response = await axios.post('/auth/login', {
                     username,
                     password,
                 });

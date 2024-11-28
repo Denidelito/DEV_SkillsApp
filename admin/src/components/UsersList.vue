@@ -1,37 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useAuthStore } from '../stores/auth';
+import { onMounted, ref } from 'vue';
+import { useUsersStore } from '../stores/users';
 
-const users = ref([]); // Список пользователей
-const errorMessage = ref(''); // Сообщение об ошибке
+const usersStore = useUsersStore();
+const errorMessage = ref('');
 
-const authStore = useAuthStore(); // Получаем доступ к авторизационному store
-
-const fetchUsers = async () => {
-  errorMessage.value = '';
-
+// Загружаем список пользователей при монтировании
+onMounted(async () => {
   try {
-    // Отправляем GET запрос с токеном в заголовке
-    const response = await axios.get('http://localhost:3000/api/users', {
-      headers: {
-        Authorization: `Bearer ${authStore.token}`,
-      },
-    });
-    users.value = response.data; // Сохраняем список пользователей
+    await usersStore.fetchUsers();
   } catch (error) {
-    // Обрабатываем ошибки
-    if (error.response) {
-      errorMessage.value = error.response.data.message || 'Failed to fetch users!';
-    } else {
-      errorMessage.value = 'Network or server error!';
-    }
+    errorMessage.value = error.message;
   }
-};
-
-// Запрос пользователей при монтировании компонента
-onMounted(() => {
-  fetchUsers();
 });
 </script>
 
@@ -39,17 +19,14 @@ onMounted(() => {
   <div class="users-list">
     <h2>Users</h2>
 
-    <!-- Если есть ошибка, отображаем сообщение -->
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
 
-    <!-- Отображаем список пользователей -->
-    <ul v-if="users.length">
-      <li v-for="user in users" :key="user.id">
-        <strong>{{ user.name }}</strong> ({{ user.email }})
+    <ul v-if="usersStore.users.length">
+      <li v-for="user in usersStore.users" :key="user.id">
+        {{user.username}}
       </li>
     </ul>
 
-    <!-- Если пользователей нет и ошибок нет -->
     <p v-else-if="!errorMessage">No users available.</p>
   </div>
 </template>
