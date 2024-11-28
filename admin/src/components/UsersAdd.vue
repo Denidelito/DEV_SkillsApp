@@ -54,7 +54,7 @@ const successMessage = computed(() => userStore.successMessage);
 
 <style scoped>
 .add-user {
-  width: 100%;
+  max-width: 400px;
   margin: auto;
   padding: 2em;
   background-color: #f9f9f9;

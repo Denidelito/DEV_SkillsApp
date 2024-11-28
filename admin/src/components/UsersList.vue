@@ -18,6 +18,7 @@ onMounted(async () => {
 <template>
   <div class="users-list">
     <h2>Users</h2>
+
     <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
 
     <ul v-if="usersStore.users.length">
@@ -32,7 +33,7 @@ onMounted(async () => {
 
 <style scoped>
 .users-list {
-  width: 100%;
+  max-width: 600px;
   margin: auto;
   padding: 1.5em;
   background-color: #f9f9f9;
