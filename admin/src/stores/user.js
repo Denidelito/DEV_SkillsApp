@@ -13,24 +13,30 @@ export const useUsersStore = defineStore('users', {
             this.successMessage = '';
 
             try {
-                const response = await axios.post('/api/users', {
-                    username,
-                    password,
-                    role,
-                },{headers: {
-                        Authorization: `Bearer ${this.authStore.token}`,
-                    },});
+                const response = await axios.post(
+                    '/api/users',
+                    { username, password, role },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.authStore.token}`,
+                        },
+                    }
+                );
+
                 this.successMessage = 'User added successfully!';
                 return response.data;
             } catch (error) {
                 if (error.response) {
                     this.errorMessage = error.response.data.message || 'Failed to add user!';
+                } else if (error.request) {
+                    this.errorMessage = 'No response from server. Please try again later.';
                 } else {
-                    this.errorMessage = 'Network error!';
+                    this.errorMessage = `Request error: ${error.message}`;
                 }
                 return null;
             }
         },
+
 
         async fetchUsers() {
             try {

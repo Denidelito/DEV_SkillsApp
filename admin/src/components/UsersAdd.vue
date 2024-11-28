@@ -7,9 +7,9 @@
         <label for="username">Username:</label>
         <input type="text" id="username" v-model="username" required />
       </div>
-      <div>
+      <div v-if="role !== 'user'">
         <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" />
+        <input type="password" id="password" v-model="password" :required="role !== 'user'" />
       </div>
       <div>
         <label for="role">Role:</label>
@@ -35,7 +35,11 @@ const role = ref('user');
 const userStore = useUsersStore();
 
 const addUser = async () => {
-  const response = await userStore.addUser(username.value, password.value, role.value);
+  const response = await userStore.addUser(
+      username.value,
+      role.value === 'user' ? null : password.value,
+      role.value
+  );
 
   if (response) {
     username.value = '';

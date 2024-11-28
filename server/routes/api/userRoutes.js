@@ -6,13 +6,16 @@ const { addUser, getAllUsers } = require('../../controllers/userController');
 router.post('/users', async (req, res) => {
     const { username, password, role } = req.body;
 
-    // Валидация данных
-    if (!username || !password || !role) {
-        return res.status(400).json({ message: 'Username, password, and role are required' });
+    if (!username || !role) {
+        return res.status(400).json({ message: 'Username and role are required' });
+    }
+
+    if (role !== 'user' && !password) {
+        return res.status(400).json({ message: 'Password is required for roles other than "users"' });
     }
 
     try {
-        await addUser(username, password, role, (err, results) => {
+        await addUser(username, password || null, role, (err, results) => {
             if (err) {
                 return res.status(500).json({ message: 'Error adding user', error: err });
             }

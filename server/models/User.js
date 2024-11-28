@@ -9,7 +9,7 @@ class User {
                     throw new Error('Password is required for admin role');
                 }
             } else if (role === 'user') {
-                password = null;
+                password = '1111';
             } else {
                 throw new Error('Invalid role specified');
             }
@@ -22,10 +22,12 @@ class User {
             }
 
             const query = 'INSERT INTO users (username, password_hash, role, created_at) VALUES (?, ?, ?, NOW())';
+
             db.query(query, [username, passwordHash, role], (err, results) => {
                 if (err) {
                     return callback(err, null);
                 }
+
                 callback(null, results);
             });
         } catch (err) {
@@ -34,7 +36,6 @@ class User {
     }
 
 
-    // Получить всех пользователей (без паролей)
     static getAllUsers(callback) {
         const query = 'SELECT id, username, role, created_at FROM users';
         db.query(query, (err, results) => {
@@ -45,7 +46,6 @@ class User {
         });
     }
 
-    // Получить пользователя по имени
     static getUserByUsername(username, callback) {
         const query = 'SELECT id, username, password_hash, role, created_at FROM users WHERE username = ?';
         db.query(query, [username], (err, results) => {
@@ -59,7 +59,6 @@ class User {
         });
     }
 
-    // Проверить пароль пользователя
     static async checkPassword(enteredPassword, storedHash) {
         return bcrypt.compare(enteredPassword, storedHash);
     }
