@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addUser, getAllUsers } = require('../../controllers/userController');
+const { addUser, getAllUsers, deleteUser } = require('../../controllers/userController');
 
 // Маршрут для добавления нового пользователя
 router.post('/users', async (req, res) => {
@@ -33,6 +33,18 @@ router.get('/users', (req, res) => {
             return res.status(500).json({ message: 'Error fetching users', error: err });
         }
         res.status(200).json(users);
+    });
+});
+
+// Маршрут для удаления пользователя
+router.delete('/users/:id', (req, res) => {
+    const userId = req.params.id;
+
+    deleteUser(userId, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error deleting user', error: err });
+        }
+        res.status(200).json({ message: 'User deleted successfully', affectedRows: results.affectedRows });
     });
 });
 

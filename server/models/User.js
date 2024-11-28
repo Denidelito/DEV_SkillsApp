@@ -62,6 +62,20 @@ class User {
     static async checkPassword(enteredPassword, storedHash) {
         return bcrypt.compare(enteredPassword, storedHash);
     }
+
+    static deleteUser(userId, callback) {
+        const query = 'DELETE FROM users WHERE id = ?';
+
+        db.query(query, [userId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            if (results.affectedRows === 0) {
+                return callback(new Error('User not found'), null);
+            }
+            callback(null, results);
+        });
+    }
 }
 
 module.exports = User;

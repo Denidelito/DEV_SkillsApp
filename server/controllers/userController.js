@@ -24,7 +24,18 @@ const getAllUsers = (callback) => {
     });
 };
 
+// Удалить пользователя
+const deleteUser = (userId, callback) => {
+    User.deleteUser(userId, (err, results) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, results);
+    });
+};
+
 module.exports = {
     addUser,
-    getAllUsers
+    getAllUsers,
+    deleteUser
 };
