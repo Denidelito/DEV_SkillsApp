@@ -22,3 +22,6 @@ admin/.vscode/extensions.json
 *.njsproj
 *.sln
 *.sw?
+
+admin/package-lock.json
+server/package-lock.json
