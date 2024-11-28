@@ -24,11 +24,12 @@ import DashboardNav from "../components/Dashboard/DashboardNav.vue";
 
     &-body {
       display: flex;
-      height: calc(100% - 47px);
+      height: calc(100% - 60px);
     }
 
     &-container {
-      width: 100%;
+      width: calc(100% - 300px);
+      box-sizing: border-box;
       padding: 20px;
     }
 

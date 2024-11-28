@@ -38,7 +38,7 @@ const login = async () => {
         <input type="password" id="password" v-model="password" required/>
       </div>
       <div v-if="errorMessage" class="message-error">{{ errorMessage }}</div>
-      <button class="btn" type="submit">Login</button>
+      <button class="button" type="submit">Login</button>
     </form>
   </div>
 </template>
