@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import Login from '../views/Login.vue';
 import Dashboard from '../views/Dashboard.vue';
+import Users from "../views/Users.vue";
 
 const requireAuth = (to, from, next) => {
     const authStore = useAuthStore();
@@ -22,6 +23,12 @@ const routes = [
         path: '/admin/',
         component: Dashboard,
         beforeEnter: requireAuth,
+        children: [
+            {
+                path: 'users',
+                component: Users,
+            },
+        ],
     },
     {
         path: '/:catchAll(.*)',
