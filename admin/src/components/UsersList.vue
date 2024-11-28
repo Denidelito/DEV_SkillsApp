@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useUsersStore } from '../stores/users';
+import { useUsersStore } from '../stores/user';
 
 const usersStore = useUsersStore();
 const errorMessage = ref('');
