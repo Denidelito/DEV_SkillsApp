@@ -1,22 +1,12 @@
 <script setup>
-import { useAuthStore } from '../stores/auth.js';
-import { useRouter } from 'vue-router';
+import Header from "../components/Header.vue";
 import UsersList from "../components/UsersList.vue";
 
-const authStore = useAuthStore();
-const router = useRouter();
-
-// Функция для выхода из системы
-const logout = () => {
-  authStore.logout();
-  router.push('/admin/login');
-};
 </script>
 
 <template>
   <div>
-    <h2>Welcome to the Dashboard</h2>
-    <button @click="logout">Logout</button>
+    <Header></Header>
     <users-list/>
   </div>
 </template>

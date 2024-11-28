@@ -3,7 +3,6 @@ import { useAuthStore } from '../stores/auth';
 import Login from '../views/Login.vue';
 import Dashboard from '../views/Dashboard.vue';
 
-// Проверка на авторизацию
 const requireAuth = (to, from, next) => {
     const authStore = useAuthStore();
 
@@ -23,6 +22,10 @@ const routes = [
         path: '/admin/',
         component: Dashboard,
         beforeEnter: requireAuth,
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/admin',
     },
 ];
 
