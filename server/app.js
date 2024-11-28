@@ -1,8 +1,11 @@
 const express = require('express');
 const path = require('path');
 const cors = require('./config/cors');
-const config = require('./config/port')
-const apiRoutes= require("./routes")
+const config = require('./config/port');
+const apiRoutes= require("./routes");
+const authMiddleware = require('./middleware/authMiddleware')
+const authRoutes = require('./routes/authRoutes');
+
 require('dotenv').config();
 
 const app = express();
@@ -23,7 +26,8 @@ app.get('/admin/*', (req, res) => {
 });
 
 // API маршруты
-app.use(apiRoutes);
+app.use('/api', authMiddleware, apiRoutes);
+app.use('/auth', authRoutes);
 
 
 // Запускаем сервер

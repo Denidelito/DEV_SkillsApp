@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addUser, getAllUsers } = require('../controllers/userController');
+const { addUser, getAllUsers } = require('../../controllers/userController');
 
 // Маршрут для добавления нового пользователя
 router.post('/users', async (req, res) => {

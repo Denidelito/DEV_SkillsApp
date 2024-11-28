@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addTaskGroup, getAllTaskGroups } = require('../controllers/taskGroupController');
+const { addTaskGroup, getAllTaskGroups } = require('../../controllers/taskGroupController');
 
 router.post('/task_groups', (req, res) => {
     const { direction_id, name, description } = req.body;

@@ -13,7 +13,7 @@ export const useAuthStore = defineStore('auth', {
             this.errorMessage = '';
 
             try {
-                const response = await axios.post('http://localhost:3000/api/login', {
+                const response = await axios.post('http://localhost:3000/auth/login', {
                     username,
                     password,
                 });

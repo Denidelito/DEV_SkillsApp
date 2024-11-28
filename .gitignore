@@ -14,6 +14,10 @@ dist-ssr
 
 # Editor directories and files
 admin/.vscode/extensions.json
+
+admin/package-lock.json
+server/package-lock.json
+
 !.vscode/extensions.json
 .idea/
 .DS_Store
@@ -22,6 +26,3 @@ admin/.vscode/extensions.json
 *.njsproj
 *.sln
 *.sw?
-
-admin/package-lock.json
-server/package-lock.json

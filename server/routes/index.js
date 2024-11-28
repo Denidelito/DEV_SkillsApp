@@ -1,17 +1,17 @@
 const express = require('express');
 
-const directionRoutes = require('./directionRoutes');
-const taskGroupRoutes = require('./taskGroupRoutes');
-const taskRoutes = require('./taskRoutes');
-const userRoutes = require('./userRoutes');
-const authRoutes = require('./authRoutes');
+const directionRoutes = require('./api/directionRoutes');
+const taskGroupRoutes = require('./api/taskGroupRoutes');
+const taskRoutes = require('./api/taskRoutes');
+const userRoutes = require('./api/userRoutes');
+// const authRoutes = require('./authRoutes');
 
 const router = express.Router();
 
-router.use('/api', directionRoutes);
-router.use('/api',taskGroupRoutes);
-router.use('/api',taskRoutes);
-router.use('/api',userRoutes);
-router.use('/api', authRoutes);
+router.use(directionRoutes);
+router.use(taskGroupRoutes);
+router.use(taskRoutes);
+router.use(userRoutes);
+// router.use(authRoutes);
 
 module.exports = router;

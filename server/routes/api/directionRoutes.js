@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addDirection, getAllDirections } = require('../controllers/directionController');
+const { addDirection, getAllDirections } = require('../../controllers/directionController');
 
 // Маршрут для добавления нового направления
 router.post('/directions', (req, res) => {
