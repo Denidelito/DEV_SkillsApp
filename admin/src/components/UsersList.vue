@@ -1,11 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useUsersStore } from '../stores/user';
+import {onMounted, ref} from 'vue';
+import {useUsersStore} from '../stores/user';
 
 const usersStore = useUsersStore();
 const errorMessage = ref('');
+const showModal = ref(false);
+const userIdToDelete = ref(null);
 
-// Загружаем список пользователей при монтировании
 onMounted(async () => {
   try {
     await usersStore.fetchUsers();
@@ -13,6 +14,28 @@ onMounted(async () => {
     errorMessage.value = error.message;
   }
 });
+
+const handleDelete = async () => {
+  if (userIdToDelete.value !== null) {
+    try {
+      await usersStore.deleteUser(userIdToDelete.value);
+      usersStore.users = usersStore.users.filter(user => user.id !== userIdToDelete.value);
+      showModal.value = false;
+    } catch (error) {
+      errorMessage.value = error.message;
+    }
+  }
+};
+
+const openModal = (userId) => {
+  userIdToDelete.value = userId;
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+  userIdToDelete.value = null;
+};
 </script>
 
 <template>
@@ -29,35 +52,26 @@ onMounted(async () => {
     </thead>
     <tbody>
     <tr v-for="user in usersStore.users" :key="user.id">
-      <td>{{user.id}}</td>
-      <td>{{user.username}}</td>
-      <td>{{user.role}}</td>
-      <td>Удалить</td>
+      <td>{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.role }}</td>
+      <td>
+        <button @click="openModal(user.id)" class="button button--small button--danger">Удалить</button>
+      </td>
     </tr>
     </tbody>
   </table>
 
   <p v-else-if="!errorMessage">No users available.</p>
+
+  <div v-if="showModal" class="modal-overlay">
+    <div class="modal">
+      <h3>Подтвердите удаление</h3>
+      <p>Вы уверены, что хотите удалить этого пользователя?</p>
+      <div class="modal-actions">
+        <button @click="handleDelete" class="button button--danger">Да, удалить</button>
+        <button @click="closeModal" class="button button--secondary">Отмена</button>
+      </div>
+    </div>
+  </div>
 </template>
-
-<style scoped>
-
-h2 {
-  text-align: center;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin-bottom: 0.5em;
-}
-
-.error-message {
-  color: red;
-  font-size: 0.9em;
-  margin-bottom: 1em;
-}
-</style>

@@ -9,4 +9,29 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
+
+  & > select {
+    padding: 0.5em;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:focus {
+      border-color: black;
+    }
+
+    &:not(:placeholder-shown) {
+      color: #333;
+    }
+
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      color: black;
+      transform: translateY(-1.5em);
+    }
+  }
 }

@@ -1,7 +1,11 @@
 .message {
+  font-size: 0.9em;
+  margin-bottom: 1em;
+
   &-error {
     color: red;
-    font-size: 0.9em;
-    margin-bottom: 1em;
+  }
+  &-success {
+    color: #007bff;
   }
 }
