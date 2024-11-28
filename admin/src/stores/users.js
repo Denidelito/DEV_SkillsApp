@@ -4,7 +4,7 @@ import { useAuthStore } from './auth';
 
 export const useUsersStore = defineStore('users', {
     state: () => ({
-        users: [], // Список пользователей
+        users: [],
     }),
     actions: {
         async fetchUsers() {

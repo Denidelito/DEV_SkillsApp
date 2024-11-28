@@ -2,11 +2,25 @@ const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 
 class User {
-    // Добавить нового пользователя с хэшированием пароля
     static async addUser(username, password, role, callback) {
         try {
-            const saltRounds = 10;
-            const passwordHash = await bcrypt.hash(password, saltRounds);
+            if (role === 'admin') {
+                if (!password) {
+                    throw new Error('Password is required for admin role');
+                }
+            } else if (role === 'user') {
+                password = null;
+            } else {
+                throw new Error('Invalid role specified');
+            }
+
+            let passwordHash = null;
+
+            if (password) {
+                const saltRounds = 10;
+                passwordHash = await bcrypt.hash(password, saltRounds);
+            }
+
             const query = 'INSERT INTO users (username, password_hash, role, created_at) VALUES (?, ?, ?, NOW())';
             db.query(query, [username, passwordHash, role], (err, results) => {
                 if (err) {
@@ -18,6 +32,7 @@ class User {
             callback(err, null);
         }
     }
+
 
     // Получить всех пользователей (без паролей)
     static getAllUsers(callback) {

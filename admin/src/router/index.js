@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
-import Login from '../components/Login.vue';
-import Dashboard from '../components/Dashboard.vue';
+import Login from '../views/Login.vue';
+import Dashboard from '../views/Dashboard.vue';
 
 // Проверка на авторизацию
 const requireAuth = (to, from, next) => {
