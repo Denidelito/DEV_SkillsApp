@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useDirectionsStore } from '../stores/directions.js';
 import DirectionsList from "../components/DirectionsList.vue";
 
@@ -11,8 +11,7 @@ const directionName = ref('');
 const directionDescription = ref('');
 
 const addDirection = async () => {
-  errorMessage.value = '';
-  successMessage.value = '';
+  directionsStore.clearMessages();
 
   const response = await directionsStore.addDirection(
       directionName.value,
@@ -29,7 +28,6 @@ const addDirection = async () => {
   }
 };
 
-
 const isModalOpen = ref(false);
 
 const openModal = () => {
@@ -38,8 +36,9 @@ const openModal = () => {
 
 const closeModal = () => {
   isModalOpen.value = false;
-  directionsStore.value = '';
+  directionName.value = '';
   directionDescription.value = '';
+  directionsStore.clearMessages();
 };
 </script>
 
@@ -49,12 +48,12 @@ const closeModal = () => {
       <form @submit.prevent="addDirection" class="form">
         <div class="input">
           <label for="direction-name">Название:</label>
-          <input id="direction-name" v-model="directionName" type="text"/>
+          <input id="direction-name" v-model="directionName" type="text" required />
         </div>
 
         <div class="input">
           <label for="direction-description">Описание:</label>
-          <textarea id="direction-description" v-model="directionDescription"></textarea>
+          <textarea id="direction-description" v-model="directionDescription" required></textarea>
         </div>
 
         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -69,3 +68,4 @@ const closeModal = () => {
   <button class="button" @click="openModal">Добавить направление</button>
   <directions-list/>
 </template>
+

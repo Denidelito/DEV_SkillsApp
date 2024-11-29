@@ -1,6 +1,5 @@
 const User = require('../models/User');
 
-// Добавить нового пользователя
 const addUser = async (username, password, role, callback) => {
     try {
         await User.addUser(username, password, role, (err, results) => {
@@ -14,7 +13,6 @@ const addUser = async (username, password, role, callback) => {
     }
 };
 
-// Получить всех пользователей
 const getAllUsers = (callback) => {
     User.getAllUsers((err, users) => {
         if (err) {
@@ -24,7 +22,6 @@ const getAllUsers = (callback) => {
     });
 };
 
-// Удалить пользователя
 const deleteUser = (userId, callback) => {
     User.deleteUser(userId, (err, results) => {
         if (err) {

@@ -1,35 +1,19 @@
 <script setup>
-import { ref, computed } from "vue";
+import {ref, computed} from "vue";
 import UsersList from "../components/UsersList.vue";
-import { useUsersStore } from '../stores/user';
+import {useUsersStore} from '../stores/user';
 
 const username = ref('');
 const password = ref('');
 const role = ref('user');
 const userStore = useUsersStore();
 
-const addUser = async () => {
-  const response = await userStore.addUser(
-      username.value,
-      role.value === 'user' ? null : password.value,
-      role.value
-  );
+const isModalOpen = ref(false);
 
-  if (response) {
-    username.value = '';
-    password.value = '';
-    role.value = 'user';
-
-    closeModal();
-
-    await userStore.fetchUsers();
-  }
-};
+const passwordFieldRequired = computed(() => role.value !== 'user');
 
 const errorMessage = computed(() => userStore.errorMessage);
 const successMessage = computed(() => userStore.successMessage);
-
-const isModalOpen = ref(false);
 
 const openModal = () => {
   isModalOpen.value = true;
@@ -37,11 +21,28 @@ const openModal = () => {
 
 const closeModal = () => {
   isModalOpen.value = false;
+  resetForm();
+  userStore.clearMessages();
+};
+
+const resetForm = () => {
   username.value = '';
   password.value = '';
   role.value = 'user';
-  userStore.errorMessage = null;
-  userStore.successMessage = null;
+};
+
+const addUser = async () => {
+  const response = await userStore.addUser(
+      username.value,
+      passwordFieldRequired.value ? password.value : null,
+      role.value
+  );
+
+  if (response) {
+    resetForm();
+    closeModal();
+    await userStore.fetchUsers();
+  }
 };
 </script>
 
@@ -53,11 +54,11 @@ const closeModal = () => {
       <form @submit.prevent="addUser">
         <div class="input">
           <label for="username">Username:</label>
-          <input type="text" id="username" v-model="username" required />
+          <input type="text" id="username" v-model="username" required/>
         </div>
-        <div class="input" v-if="role !== 'user'">
+        <div class="input" v-if="passwordFieldRequired">
           <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password" :required="role !== 'user'" />
+          <input type="password" id="password" v-model="password" :required="passwordFieldRequired"/>
         </div>
         <div class="input">
           <label for="role">Role:</label>
@@ -76,7 +77,3 @@ const closeModal = () => {
 
   <users-list/>
 </template>
-
-<style scoped>
-
-</style>

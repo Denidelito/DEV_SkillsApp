@@ -2,12 +2,14 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGroupsStore } from '../stores/taskGroups.js';
+import GroupList from '../components/TaskGroupList.vue';
 
 const groupsStore = useGroupsStore();
 const route = useRoute();
 const directionId = ref(route.params.directionId);
 const newGroupName = ref('');
 const newGroupDescription = ref('');
+const isModalOpen = ref(false);
 
 onMounted(async () => {
   await groupsStore.fetchGroupsByDirection(directionId.value);
@@ -21,30 +23,56 @@ const handleAddGroup = async () => {
   await groupsStore.addGroup(directionId.value, newGroupName.value, newGroupDescription.value);
   newGroupName.value = '';
   newGroupDescription.value = '';
+  closeModal();
 };
 
 const handleDeleteGroup = async (groupId) => {
   await groupsStore.deleteGroup(groupId);
 };
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  newGroupName.value = '';
+  newGroupDescription.value = '';
+  groupsStore.clearMessages();
+};
 </script>
 
 <template>
   <div>
-    <div v-if="groupsStore.errorMessage" class="error-message">{{ groupsStore.errorMessage }}</div>
-    <div v-if="groupsStore.successMessage" class="success-message">{{ groupsStore.successMessage }}</div>
+    <button class="button" @click="openModal">Добавить группу</button>
 
-    <ul v-if="groupsStore.groups.length > 0">
-      <li v-for="group in groupsStore.groups" :key="group.id">
-        {{ group.name }} - {{ group.description }}
-        <button @click="handleDeleteGroup(group.id)">Удалить</button>
-      </li>
-    </ul>
-    <div v-else>
-      <p>No groups found for this direction.</p>
+    <div v-if="isModalOpen" class="modal-overlay">
+      <div class="modal">
+        <form @submit.prevent="handleAddGroup" class="form">
+          <div class="input">
+            <label for="group-name">Название группы:</label>
+            <input id="group-name" v-model="newGroupName" type="text" required />
+          </div>
+
+          <div class="input">
+            <label for="group-description">Описание группы:</label>
+            <textarea id="group-description" v-model="newGroupDescription" required></textarea>
+          </div>
+
+          <div v-if="groupsStore.errorMessage" class="error-message">{{ groupsStore.errorMessage }}</div>
+          <div v-if="groupsStore.successMessage" class="success-message">{{ groupsStore.successMessage }}</div>
+
+          <button type="submit" class="button">Добавить</button>
+          <button class="button button--secondary" type="button" @click="closeModal">Отмена</button>
+        </form>
+      </div>
     </div>
 
-    <input v-model="newGroupName" placeholder="Group name" />
-    <input v-model="newGroupDescription" placeholder="Group description" />
-    <button @click="handleAddGroup" :disabled="!newGroupName || !newGroupDescription">Добавить группу</button>
+    <GroupList
+        :groups="groupsStore.groups"
+        :errorMessage="groupsStore.errorMessage"
+        :successMessage="groupsStore.successMessage"
+        :onDeleteGroup="handleDeleteGroup"
+    />
   </div>
 </template>

@@ -29,28 +29,6 @@ export const useUsersStore = defineStore('users', {
             return `Bearer ${this.authStore.token}`;
         },
 
-        async addUser(username, password, role) {
-            this.clearMessages();
-
-            try {
-                const response = await axios.post(
-                    '/api/users',
-                    { username, password, role },
-                    {
-                        headers: {
-                            Authorization: this.getAuthToken(),
-                        },
-                    }
-                );
-
-                this.successMessage = 'User added successfully!';
-                return response.data;
-            } catch (error) {
-                this.handleError(error);
-                return null;
-            }
-        },
-
         async fetchUsers() {
             try {
                 const response = await axios.get('/api/users', {
@@ -66,6 +44,29 @@ export const useUsersStore = defineStore('users', {
                 } else {
                     this.handleError(error);
                 }
+            }
+        },
+
+        async addUser(username, password, role) {
+            this.clearMessages();
+
+            try {
+                const response = await axios.post(
+                    '/api/users',
+                    { username, password, role },
+                    {
+                        headers: {
+                            Authorization: this.getAuthToken(),
+                        },
+                    }
+                );
+
+                this.successMessage = 'User added successfully!';
+                await this.fetchUsers();
+                return response.data;
+            } catch (error) {
+                this.handleError(error);
+                return null;
             }
         },
 

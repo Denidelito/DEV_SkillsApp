@@ -1,23 +1,16 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref } from 'vue';
 import { useDirectionsStore } from '../stores/directions.js';
 
 const directionsStore = useDirectionsStore();
-const errorMessage = ref('');
-const successMessage = ref('');
 const showModal = ref(false);
 const directionIdToDelete = ref(null);
-
-const clearMessages = () => {
-  errorMessage.value = '';
-  successMessage.value = '';
-};
 
 onMounted(async () => {
   try {
     await directionsStore.fetchDirections();
   } catch (error) {
-    errorMessage.value = error.message;
+    directionsStore.errorMessage = error.message;
   }
 });
 
@@ -28,18 +21,20 @@ const handleDelete = async () => {
       directionsStore.directions = directionsStore.directions.filter(
           direction => direction.id !== directionIdToDelete.value
       );
-      successMessage.value = 'Направление успешно удалено.';
+      directionsStore.successMessage = 'Направление успешно удалено.';
       showModal.value = false;
 
-      setTimeout(() => (successMessage.value = ''), 3000);
+      setTimeout(() => {
+        directionsStore.successMessage = '';
+      }, 3000);
     } catch (error) {
-      errorMessage.value = error.message;
+      directionsStore.errorMessage = error.message;
     }
   }
 };
 
 const openModal = (directionId) => {
-  clearMessages();
+  directionsStore.clearMessages();
   directionIdToDelete.value = directionId;
   showModal.value = true;
 };
@@ -52,8 +47,12 @@ const closeModal = () => {
 
 <template>
   <div>
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-    <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+    <div v-if="directionsStore.errorMessage" class="error-message">
+      {{ directionsStore.errorMessage }}
+    </div>
+    <div v-if="directionsStore.successMessage" class="success-message">
+      {{ directionsStore.successMessage }}
+    </div>
 
     <table class="table" v-if="directionsStore.directions.length">
       <thead>
@@ -69,7 +68,7 @@ const closeModal = () => {
         <td>{{ direction.id }}</td>
         <td>
           <router-link :to="`/admin/directions/${direction.id}/groups`">
-          {{ direction.name }}
+            {{ direction.name }}
           </router-link>
         </td>
         <td>{{ direction.description }}</td>
@@ -85,7 +84,7 @@ const closeModal = () => {
       </tbody>
     </table>
 
-    <p v-else-if="!errorMessage">Нет доступных направлений.</p>
+    <p v-else-if="!directionsStore.errorMessage">Нет доступных направлений.</p>
 
     <div v-if="showModal" class="modal-overlay">
       <div class="modal">

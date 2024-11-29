@@ -1,11 +1,12 @@
 <script setup>
-import {onMounted, ref} from 'vue';
-import {useUsersStore} from '../stores/user';
+import { onMounted, ref } from 'vue';
+import { useUsersStore } from '../stores/user';
 
 const usersStore = useUsersStore();
-const errorMessage = ref('');
 const showModal = ref(false);
 const userIdToDelete = ref(null);
+const errorMessage = ref('');
+const successMessage = ref('');
 
 onMounted(async () => {
   try {
@@ -19,8 +20,9 @@ const handleDelete = async () => {
   if (userIdToDelete.value !== null) {
     try {
       await usersStore.deleteUser(userIdToDelete.value);
+      successMessage.value = 'User deleted successfully!';
       usersStore.users = usersStore.users.filter(user => user.id !== userIdToDelete.value);
-      showModal.value = false;
+      closeModal();
     } catch (error) {
       errorMessage.value = error.message;
     }
@@ -36,10 +38,16 @@ const closeModal = () => {
   showModal.value = false;
   userIdToDelete.value = null;
 };
+
+const clearMessages = () => {
+  errorMessage.value = '';
+  successMessage.value = '';
+};
 </script>
 
 <template>
   <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
 
   <table class="table" v-if="usersStore.users.length">
     <thead>
@@ -75,3 +83,4 @@ const closeModal = () => {
     </div>
   </div>
 </template>
+
