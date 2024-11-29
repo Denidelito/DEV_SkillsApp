@@ -20,6 +20,16 @@ class TaskGroup {
             callback(null, results);
         });
     }
+
+    static getTaskGroupsByDirection(directionId, callback) {
+        const query = 'SELECT * FROM task_groups WHERE direction_id = ?';
+        db.query(query, [directionId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results);
+        });
+    }
 }
 
 module.exports = TaskGroup;
