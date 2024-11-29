@@ -28,7 +28,25 @@ const getAllDirections = () => {
     });
 };
 
+// Модель для удаления направления
+const deleteDirection = (id) => {
+    return new Promise((resolve, reject) => {
+        const query = 'DELETE FROM directions WHERE id = ?';
+        db.query(query, [id], (err, results) => {
+            if (err) {
+                console.error('Error deleting direction:', err);
+                return reject(err);
+            }
+            if (results.affectedRows === 0) {
+                return reject(new Error('No direction found with the provided ID'));
+            }
+            resolve(results);
+        });
+    });
+};
+
 module.exports = {
     addDirection,
-    getAllDirections
+    getAllDirections,
+    deleteDirection
 };

@@ -22,7 +22,19 @@ const getAllDirections = (callback) => {
         });
 };
 
+// Функция для удаления направления
+const deleteDirection = (id, callback) => {
+    Direction.deleteDirection(id)
+        .then((results) => {
+            callback(null, results);
+        })
+        .catch((err) => {
+            callback(err, null);
+        });
+};
+
 module.exports = {
     addDirection,
-    getAllDirections
+    getAllDirections,
+    deleteDirection
 };
