@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addDirection, getAllDirections, deleteDirection } = require('../../controllers/directionController');
+const { addDirection, getAllDirections, deleteDirection, updateDirection } = require('../../controllers/directionController');
 
 router.post('/directions', (req, res) => {
     const { name, description } = req.body;
@@ -23,6 +23,31 @@ router.get('/directions', (req, res) => {
             return res.status(500).json({ message: 'Error fetching directions', error: err });
         }
         res.status(200).json(directions);
+    });
+});
+
+router.put('/directions/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, description } = req.body;
+
+    if (!id) {
+        return res.status(400).json({ message: 'Direction ID is required' });
+    }
+
+    if (!name || !description) {
+        return res.status(400).json({ message: 'Name and description are required' });
+    }
+
+    updateDirection(id, name, description, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error updating direction', error: err });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Direction not found' });
+        }
+
+        res.status(200).json({ message: 'Direction updated successfully' });
     });
 });
 

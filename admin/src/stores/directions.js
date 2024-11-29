@@ -76,6 +76,32 @@ export const useDirectionsStore = defineStore('directions', {
             }
         },
 
+        async updateDirection(directionId, name, description) {
+            this.clearMessages();
+            try {
+                const response = await axios.put(
+                    `/api/directions/${directionId}`,
+                    { name, description },
+                    {
+                        headers: {
+                            Authorization: this.getAuthToken(),
+                        },
+                    }
+                );
+
+                const index = this.directions.findIndex(direction => direction.id === directionId);
+                if (index !== -1) {
+                    this.directions[index] = { ...this.directions[index], name, description };
+                }
+
+                this.successMessage = 'Direction updated successfully!';
+                return response.data;
+            } catch (error) {
+                this.handleError(error);
+                return null;
+            }
+        },
+
         async deleteDirection(directionId) {
             this.clearMessages();
             try {

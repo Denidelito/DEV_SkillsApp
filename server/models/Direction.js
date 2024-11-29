@@ -41,8 +41,25 @@ const deleteDirection = (id) => {
     });
 };
 
+const updateDirection = (id, name, description) => {
+    return new Promise((resolve, reject) => {
+        const query = 'UPDATE directions SET name = ?, description = ?, updated_at = NOW() WHERE id = ?';
+        db.query(query, [name, description, id], (err, results) => {
+            if (err) {
+                console.error('Error updating direction:', err);
+                return reject(err);
+            }
+            if (results.affectedRows === 0) {
+                return reject(new Error('No direction found with the provided ID'));
+            }
+            resolve(results);
+        });
+    });
+};
+
 module.exports = {
     addDirection,
     getAllDirections,
-    deleteDirection
+    deleteDirection,
+    updateDirection
 };

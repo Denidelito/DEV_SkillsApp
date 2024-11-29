@@ -30,8 +30,19 @@ const deleteDirection = (id, callback) => {
         });
 };
 
+const updateDirection = (id, name, description, callback) => {
+    Direction.updateDirection(id, name, description)
+        .then((results) => {
+            callback(null, results);
+        })
+        .catch((err) => {
+            callback(err, null);
+        });
+};
+
 module.exports = {
     addDirection,
     getAllDirections,
-    deleteDirection
+    deleteDirection,
+    updateDirection
 };
