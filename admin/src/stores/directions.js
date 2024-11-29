@@ -11,13 +11,31 @@ export const useDirectionsStore = defineStore('directions', {
     }),
 
     actions: {
-        async fetchDirections() {
+        handleError(error) {
+            if (error.response) {
+                this.errorMessage = error.response.data.message || 'Request failed!';
+            } else if (error.request) {
+                this.errorMessage = 'No response from server. Please try again later.';
+            } else {
+                this.errorMessage = `Request error: ${error.message}`;
+            }
+        },
+
+        clearMessages() {
             this.errorMessage = '';
             this.successMessage = '';
+        },
+
+        getAuthToken() {
+            return `Bearer ${this.authStore.token}`;
+        },
+
+        async fetchDirections() {
+            this.clearMessages();
             try {
                 const response = await axios.get('/api/directions', {
                     headers: {
-                        Authorization: `Bearer ${this.authStore.token}`,
+                        Authorization: this.getAuthToken(),
                     },
                 });
                 this.directions = response.data;
@@ -26,21 +44,20 @@ export const useDirectionsStore = defineStore('directions', {
                     this.authStore.logout();
                     throw new Error('Session expired. Please log in again.');
                 } else {
-                    this.errorMessage = error.response?.data?.message || 'Failed to fetch directions!';
+                    this.handleError(error);
                 }
             }
         },
 
         async addDirection(name, description) {
-            this.errorMessage = '';
-            this.successMessage = '';
+            this.clearMessages();
             try {
                 const response = await axios.post(
                     '/api/directions',
                     { name, description },
                     {
                         headers: {
-                            Authorization: `Bearer ${this.authStore.token}`,
+                            Authorization: this.getAuthToken(),
                         },
                     }
                 );
@@ -54,24 +71,17 @@ export const useDirectionsStore = defineStore('directions', {
                 this.successMessage = 'Direction added successfully!';
                 return response.data;
             } catch (error) {
-                if (error.response) {
-                    this.errorMessage = error.response.data.message || 'Failed to add direction!';
-                } else if (error.request) {
-                    this.errorMessage = 'No response from server. Please try again later.';
-                } else {
-                    this.errorMessage = `Request error: ${error.message}`;
-                }
+                this.handleError(error);
                 return null;
             }
         },
 
         async deleteDirection(directionId) {
-            this.errorMessage = '';
-            this.successMessage = '';
+            this.clearMessages();
             try {
                 const response = await axios.delete(`/api/directions/${directionId}`, {
                     headers: {
-                        Authorization: `Bearer ${this.authStore.token}`,
+                        Authorization: this.getAuthToken(),
                     },
                 });
 
@@ -82,13 +92,7 @@ export const useDirectionsStore = defineStore('directions', {
                 this.successMessage = 'Direction deleted successfully!';
                 return response.data;
             } catch (error) {
-                if (error.response) {
-                    this.errorMessage = error.response.data.message || 'Failed to delete direction!';
-                } else if (error.request) {
-                    this.errorMessage = 'No response from server. Please try again later.';
-                } else {
-                    this.errorMessage = `Request error: ${error.message}`;
-                }
+                this.handleError(error);
                 return null;
             }
         },

@@ -9,8 +9,22 @@ export const useAuthStore = defineStore('auth', {
     }),
 
     actions: {
-        async login(username, password) {
+        handleError(error) {
+            if (error.response) {
+                this.errorMessage = error.response.data.message || 'Something went wrong!';
+            } else if (error.request) {
+                this.errorMessage = 'No response from server. Please try again later.';
+            } else {
+                this.errorMessage = `Request error: ${error.message}`;
+            }
+        },
+
+        clearErrorMessage() {
             this.errorMessage = '';
+        },
+
+        async login(username, password) {
+            this.clearErrorMessage();
 
             try {
                 const response = await axios.post('/auth/login', {
@@ -24,11 +38,7 @@ export const useAuthStore = defineStore('auth', {
                 localStorage.setItem('token', this.token);
                 return true;
             } catch (error) {
-                if (error.response) {
-                    this.errorMessage = error.response.data.message || 'Login failed!';
-                } else {
-                    this.errorMessage = 'Server error!';
-                }
+                this.handleError(error);
                 return false;
             }
         },

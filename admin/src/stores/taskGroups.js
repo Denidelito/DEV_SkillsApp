@@ -21,13 +21,21 @@ export const useGroupsStore = defineStore('groups', {
             }
         },
 
-        async fetchGroupsByDirection(directionId) {
+        clearMessages() {
             this.errorMessage = '';
             this.successMessage = '';
+        },
+
+        getAuthToken() {
+            return `Bearer ${this.authStore.token}`;
+        },
+
+        async fetchGroupsByDirection(directionId) {
+            this.clearMessages();
             try {
                 const response = await axios.get(`/api/task_groups/direction/${directionId}`, {
                     headers: {
-                        Authorization: `Bearer ${this.authStore.token}`,
+                        Authorization: this.getAuthToken(),
                     },
                 });
                 this.groups = response.data;
@@ -42,15 +50,14 @@ export const useGroupsStore = defineStore('groups', {
         },
 
         async addGroup(directionId, name, description) {
-            this.errorMessage = '';
-            this.successMessage = '';
+            this.clearMessages();
             try {
                 const response = await axios.post(
-                    `/api/task_groups`, // Исправлено на правильный путь
+                    `/api/task_groups`,
                     { direction_id: directionId, name, description },
                     {
                         headers: {
-                            Authorization: `Bearer ${this.authStore.token}`,
+                            Authorization: this.getAuthToken(),
                         },
                     }
                 );
@@ -70,12 +77,11 @@ export const useGroupsStore = defineStore('groups', {
         },
 
         async deleteGroup(groupId) {
-            this.errorMessage = '';
-            this.successMessage = '';
+            this.clearMessages();
             try {
                 const response = await axios.delete(`/api/task_groups/${groupId}`, {
                     headers: {
-                        Authorization: `Bearer ${this.authStore.token}`,
+                        Authorization: this.getAuthToken(),
                     },
                 });
 

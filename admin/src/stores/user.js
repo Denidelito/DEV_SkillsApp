@@ -7,12 +7,30 @@ export const useUsersStore = defineStore('users', {
         users: [],
         authStore: useAuthStore(),
         errorMessage: '',
-        successMessage: ''
+        successMessage: '',
     }),
     actions: {
-        async addUser(username, password, role) {
+        handleError(error) {
+            if (error.response) {
+                this.errorMessage = error.response.data.message || 'Request failed!';
+            } else if (error.request) {
+                this.errorMessage = 'No response from server. Please try again later.';
+            } else {
+                this.errorMessage = `Request error: ${error.message}`;
+            }
+        },
+
+        clearMessages() {
             this.errorMessage = '';
             this.successMessage = '';
+        },
+
+        getAuthToken() {
+            return `Bearer ${this.authStore.token}`;
+        },
+
+        async addUser(username, password, role) {
+            this.clearMessages();
 
             try {
                 const response = await axios.post(
@@ -20,7 +38,7 @@ export const useUsersStore = defineStore('users', {
                     { username, password, role },
                     {
                         headers: {
-                            Authorization: `Bearer ${this.authStore.token}`,
+                            Authorization: this.getAuthToken(),
                         },
                     }
                 );
@@ -28,13 +46,7 @@ export const useUsersStore = defineStore('users', {
                 this.successMessage = 'User added successfully!';
                 return response.data;
             } catch (error) {
-                if (error.response) {
-                    this.errorMessage = error.response.data.message || 'Failed to add user!';
-                } else if (error.request) {
-                    this.errorMessage = 'No response from server. Please try again later.';
-                } else {
-                    this.errorMessage = `Request error: ${error.message}`;
-                }
+                this.handleError(error);
                 return null;
             }
         },
@@ -43,7 +55,7 @@ export const useUsersStore = defineStore('users', {
             try {
                 const response = await axios.get('/api/users', {
                     headers: {
-                        Authorization: `Bearer ${this.authStore.token}`,
+                        Authorization: this.getAuthToken(),
                     },
                 });
                 this.users = response.data;
@@ -52,19 +64,18 @@ export const useUsersStore = defineStore('users', {
                     this.authStore.logout();
                     throw new Error('Session expired. Please log in again.');
                 } else {
-                    throw new Error(error.response?.data?.message || 'Failed to fetch users!');
+                    this.handleError(error);
                 }
             }
         },
 
         async deleteUser(userId) {
-            this.errorMessage = '';
-            this.successMessage = '';
+            this.clearMessages();
 
             try {
                 const response = await axios.delete(`/api/users/${userId}`, {
                     headers: {
-                        Authorization: `Bearer ${this.authStore.token}`,
+                        Authorization: this.getAuthToken(),
                     },
                 });
 
@@ -72,13 +83,7 @@ export const useUsersStore = defineStore('users', {
                 this.successMessage = 'User deleted successfully!';
                 return response.data;
             } catch (error) {
-                if (error.response) {
-                    this.errorMessage = error.response.data.message || 'Failed to delete user!';
-                } else if (error.request) {
-                    this.errorMessage = 'No response from server. Please try again later.';
-                } else {
-                    this.errorMessage = `Request error: ${error.message}`;
-                }
+                this.handleError(error);
                 return null;
             }
         },
