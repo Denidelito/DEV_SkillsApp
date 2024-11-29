@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { addDirection, getAllDirections, deleteDirection } = require('../../controllers/directionController');
 
-// Маршрут для добавления нового направления
 router.post('/directions', (req, res) => {
     const { name, description } = req.body;
 
@@ -18,7 +17,6 @@ router.post('/directions', (req, res) => {
     });
 });
 
-// Маршрут для получения всех направлений
 router.get('/directions', (req, res) => {
     getAllDirections((err, directions) => {
         if (err) {
@@ -28,7 +26,6 @@ router.get('/directions', (req, res) => {
     });
 });
 
-// Маршрут для удаления направления
 router.delete('/directions/:id', (req, res) => {
     const { id } = req.params;
 

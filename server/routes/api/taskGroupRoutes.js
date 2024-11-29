@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addTaskGroup, getAllTaskGroups } = require('../../controllers/taskGroupController');
+const { addTaskGroup, getAllTaskGroups, getTaskGroupsByDirection } = require('../../controllers/taskGroupController');
 
 router.post('/task_groups', (req, res) => {
     const { direction_id, name, description } = req.body;
@@ -20,6 +20,17 @@ router.get('/task_groups', (req, res) => {
     getAllTaskGroups((err, taskGroups) => {
         if (err) {
             return res.status(500).json({ message: 'Error fetching task groups', error: err });
+        }
+        res.status(200).json(taskGroups);
+    });
+});
+
+router.get('/task_groups/direction/:directionId', (req, res) => {
+    const { directionId } = req.params;
+
+    getTaskGroupsByDirection(directionId, (err, taskGroups) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error fetching task groups by direction', error: err });
         }
         res.status(200).json(taskGroups);
     });

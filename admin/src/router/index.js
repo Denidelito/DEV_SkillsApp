@@ -4,6 +4,7 @@ import Login from '../views/Login.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Users from "../views/Users.vue";
 import Directions from "../views/Directions.vue";
+import TaskGroups from "../views/TaskGroups.vue"; // Новый компонент
 
 const requireAuth = (to, from, next) => {
     const authStore = useAuthStore();
@@ -32,6 +33,12 @@ const routes = [
             {
                 path: 'directions',
                 component: Directions,
+            },
+            {
+                path: 'directions/:directionId/groups',
+                component: TaskGroups,
+                beforeEnter: requireAuth,
+                props: true,
             },
         ],
     },

@@ -1,6 +1,5 @@
 const Direction = require('../models/Direction');
 
-// Функция для добавления нового направления
 const addDirection = (name, description, callback) => {
     Direction.addDirection(name, description)
         .then((results) => {
@@ -11,7 +10,6 @@ const addDirection = (name, description, callback) => {
         });
 };
 
-// Функция для получения всех направлений
 const getAllDirections = (callback) => {
     Direction.getAllDirections()
         .then((directions) => {
@@ -22,7 +20,6 @@ const getAllDirections = (callback) => {
         });
 };
 
-// Функция для удаления направления
 const deleteDirection = (id, callback) => {
     Direction.deleteDirection(id)
         .then((results) => {

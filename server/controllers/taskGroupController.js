@@ -18,7 +18,17 @@ const getAllTaskGroups = (callback) => {
     });
 };
 
+const getTaskGroupsByDirection = (directionId, callback) => {
+    TaskGroup.getTaskGroupsByDirection(directionId, (err, taskGroups) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, taskGroups);
+    });
+};
+
 module.exports = {
     addTaskGroup,
-    getAllTaskGroups
+    getAllTaskGroups,
+    getTaskGroupsByDirection
 };

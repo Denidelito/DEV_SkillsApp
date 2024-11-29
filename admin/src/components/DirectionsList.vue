@@ -8,6 +8,11 @@ const successMessage = ref('');
 const showModal = ref(false);
 const directionIdToDelete = ref(null);
 
+const clearMessages = () => {
+  errorMessage.value = '';
+  successMessage.value = '';
+};
+
 onMounted(async () => {
   try {
     await directionsStore.fetchDirections();
@@ -25,6 +30,8 @@ const handleDelete = async () => {
       );
       successMessage.value = 'Направление успешно удалено.';
       showModal.value = false;
+
+      setTimeout(() => (successMessage.value = ''), 3000);
     } catch (error) {
       errorMessage.value = error.message;
     }
@@ -32,6 +39,7 @@ const handleDelete = async () => {
 };
 
 const openModal = (directionId) => {
+  clearMessages();
   directionIdToDelete.value = directionId;
   showModal.value = true;
 };
@@ -59,7 +67,11 @@ const closeModal = () => {
       <tbody>
       <tr v-for="direction in directionsStore.directions" :key="direction.id">
         <td>{{ direction.id }}</td>
-        <td>{{ direction.name }}</td>
+        <td>
+          <router-link :to="`/admin/directions/${direction.id}/groups`">
+          {{ direction.name }}
+          </router-link>
+        </td>
         <td>{{ direction.description }}</td>
         <td>
           <button
@@ -73,7 +85,7 @@ const closeModal = () => {
       </tbody>
     </table>
 
-    <p v-else-if="!errorMessage">No directions available.</p>
+    <p v-else-if="!errorMessage">Нет доступных направлений.</p>
 
     <div v-if="showModal" class="modal-overlay">
       <div class="modal">
