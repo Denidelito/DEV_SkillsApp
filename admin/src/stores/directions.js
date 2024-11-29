@@ -65,7 +65,6 @@ export const useDirectionsStore = defineStore('directions', {
             }
         },
 
-        // Удаление направления
         async deleteDirection(directionId) {
             this.errorMessage = '';
             this.successMessage = '';
