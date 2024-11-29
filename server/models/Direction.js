@@ -1,6 +1,5 @@
 const db = require('../config/db');
 
-// Модель для добавления нового направления
 const addDirection = (name, description) => {
     return new Promise((resolve, reject) => {
         const query = 'INSERT INTO directions (name, description, created_at) VALUES (?, ?, NOW())';
@@ -14,7 +13,6 @@ const addDirection = (name, description) => {
     });
 };
 
-// Модель для получения всех направлений
 const getAllDirections = () => {
     return new Promise((resolve, reject) => {
         const query = 'SELECT * FROM directions';
@@ -27,8 +25,6 @@ const getAllDirections = () => {
         });
     });
 };
-
-// Модель для удаления направления
 const deleteDirection = (id) => {
     return new Promise((resolve, reject) => {
         const query = 'DELETE FROM directions WHERE id = ?';

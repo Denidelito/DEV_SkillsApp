@@ -35,7 +35,6 @@ class User {
         }
     }
 
-
     static getAllUsers(callback) {
         const query = 'SELECT id, username, role, created_at FROM users';
         db.query(query, (err, results) => {
