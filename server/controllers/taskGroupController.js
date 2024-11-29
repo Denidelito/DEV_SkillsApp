@@ -27,8 +27,18 @@ const getTaskGroupsByDirection = (directionId, callback) => {
     });
 };
 
+const deleteTaskGroup = (taskGroupId, callback) => {
+    TaskGroup.deleteTaskGroup(taskGroupId, (err, results) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, results);
+    });
+};
+
 module.exports = {
     addTaskGroup,
     getAllTaskGroups,
-    getTaskGroupsByDirection
+    getTaskGroupsByDirection,
+    deleteTaskGroup
 };

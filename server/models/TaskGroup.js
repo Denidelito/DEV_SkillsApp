@@ -30,6 +30,16 @@ class TaskGroup {
             callback(null, results);
         });
     }
+
+    static deleteTaskGroup(taskGroupId, callback) {
+        const query = 'DELETE FROM task_groups WHERE id = ?';
+        db.query(query, [taskGroupId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results);
+        });
+    }
 }
 
 module.exports = TaskGroup;
