@@ -1,8 +1,8 @@
-@import "./components/buttons.scss";
-@import "./components/message.scss";
-@import "./components/input.scss";
-@import "./components/table.scss";
-@import "./components/modal.scss";
+@use "./components/buttons.scss";
+@use "./components/message.scss";
+@use "./components/input.scss";
+@use "./components/table.scss";
+@use "./components/modal.scss";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

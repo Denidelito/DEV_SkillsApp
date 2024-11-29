@@ -19,7 +19,7 @@ const login = async () => {
   const success = await authStore.login(username.value, password.value);
 
   if (success) {
-    router.push('/admin/');
+    router.push('/admin/users');
   } else {
     errorMessage.value = authStore.errorMessage;
   }

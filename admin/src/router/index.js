@@ -3,6 +3,7 @@ import { useAuthStore } from '../stores/auth';
 import Login from '../views/Login.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Users from "../views/Users.vue";
+import Directions from "../views/Directions.vue";
 
 const requireAuth = (to, from, next) => {
     const authStore = useAuthStore();
@@ -27,6 +28,10 @@ const routes = [
             {
                 path: 'users',
                 component: Users,
+            },
+            {
+                path: 'directions',
+                component: Directions,
             },
         ],
     },
