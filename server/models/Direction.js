@@ -25,6 +25,7 @@ const getAllDirections = () => {
         });
     });
 };
+
 const deleteDirection = (id) => {
     return new Promise((resolve, reject) => {
         const query = 'DELETE FROM directions WHERE id = ?';

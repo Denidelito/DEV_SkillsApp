@@ -85,6 +85,7 @@ const closeModal = () => {
         <th>id</th>
         <th>name</th>
         <th>description</th>
+        <th>update</th>
         <th>actions</th>
       </tr>
       </thead>
@@ -97,6 +98,7 @@ const closeModal = () => {
           </router-link>
         </td>
         <td>{{ direction.description }}</td>
+        <td>{{ direction.updated_at }}</td>
         <td>
           <button @click="openDeleteModal(direction.id)" class="button button--small button--danger">Удалить</button>
           <button @click="openEditModal(direction)" class="button button--small">Редактировать</button>
