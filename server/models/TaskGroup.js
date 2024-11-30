@@ -40,6 +40,16 @@ class TaskGroup {
             callback(null, results);
         });
     }
+
+    static updateTaskGroup(taskGroupId, name, description, callback) {
+        const query = 'UPDATE task_groups SET name = ?, description = ?, updated_at = NOW() WHERE id = ?';
+        db.query(query, [name, description, taskGroupId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results);
+        });
+    }
 }
 
 module.exports = TaskGroup;

@@ -2,9 +2,9 @@ import { defineStore } from 'pinia';
 import axios from '../axios';
 import { useAuthStore } from './auth';
 
-export const useGroupsStore = defineStore('groups', {
+export const useTasksStore = defineStore('tasks', {
     state: () => ({
-        groups: [],
+        tasks: [],
         authStore: useAuthStore(),
         errorMessage: '',
         successMessage: '',
@@ -30,15 +30,15 @@ export const useGroupsStore = defineStore('groups', {
             return `Bearer ${this.authStore.token}`;
         },
 
-        async fetchGroupsByDirection(directionId) {
+        async fetchTasksByGroup(groupId) {
             this.clearMessages();
             try {
-                const response = await axios.get(`/api/task_groups/direction/${directionId}`, {
+                const response = await axios.get(`/api/tasks/group/${groupId}`, {
                     headers: {
                         Authorization: this.getAuthToken(),
                     },
                 });
-                this.groups = response.data;
+                this.tasks = response.data;
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     this.authStore.logout();
@@ -49,12 +49,12 @@ export const useGroupsStore = defineStore('groups', {
             }
         },
 
-        async addGroup(directionId, name, description) {
+        async addTask(taskGroupId, taskData, adminId) {
             this.clearMessages();
             try {
                 const response = await axios.post(
-                    `/api/task_groups`,
-                    { direction_id: directionId, name, description },
+                    `/api/tasks`,
+                    { task_group_id: taskGroupId, task_data: taskData, admin_id: adminId },
                     {
                         headers: {
                             Authorization: this.getAuthToken(),
@@ -62,13 +62,14 @@ export const useGroupsStore = defineStore('groups', {
                     }
                 );
 
-                this.groups.push({
-                    id: response.data.taskGroupId,
-                    name,
-                    description,
+                this.tasks.push({
+                    id: response.data.taskId,
+                    task_group_id: taskGroupId,
+                    task_data: taskData,
+                    admin_id: adminId,
                 });
 
-                this.successMessage = 'Group added successfully!';
+                this.successMessage = 'Task added successfully!';
                 return response.data;
             } catch (error) {
                 this.handleError(error);
@@ -76,18 +77,18 @@ export const useGroupsStore = defineStore('groups', {
             }
         },
 
-        async deleteGroup(groupId) {
+        async deleteTask(taskId) {
             this.clearMessages();
             try {
-                const response = await axios.delete(`/api/task_groups/${groupId}`, {
+                const response = await axios.delete(`/api/tasks/${taskId}`, {
                     headers: {
                         Authorization: this.getAuthToken(),
                     },
                 });
 
-                this.groups = this.groups.filter((group) => group.id !== groupId);
+                this.tasks = this.tasks.filter((task) => task.id !== taskId);
 
-                this.successMessage = 'Group deleted successfully!';
+                this.successMessage = 'Task deleted successfully!';
                 return response.data;
             } catch (error) {
                 this.handleError(error);
@@ -95,13 +96,12 @@ export const useGroupsStore = defineStore('groups', {
             }
         },
 
-        async updateGroup(groupId, name, description) {
+        async updateTask(taskId, taskData) {
             this.clearMessages();
-
             try {
                 const response = await axios.put(
-                    `/api/task_groups/${groupId}`,
-                    { name, description },
+                    `/api/tasks/${taskId}`,
+                    { task_data: taskData },
                     {
                         headers: {
                             Authorization: this.getAuthToken(),
@@ -109,12 +109,12 @@ export const useGroupsStore = defineStore('groups', {
                     }
                 );
 
-                const groupIndex = this.groups.findIndex((group) => group.id === groupId);
-                if (groupIndex !== -1) {
-                    this.groups[groupIndex] = { ...this.groups[groupIndex], name, description };
+                const taskIndex = this.tasks.findIndex((task) => task.id === taskId);
+                if (taskIndex !== -1) {
+                    this.tasks[taskIndex] = { ...this.tasks[taskIndex], task_data: taskData };
                 }
 
-                this.successMessage = 'Group updated successfully!';
+                this.successMessage = 'Task updated successfully!';
                 return response.data;
             } catch (error) {
                 this.handleError(error);

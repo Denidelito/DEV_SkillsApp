@@ -25,15 +25,15 @@ router.get('/tasks', (req, res) => {
     });
 });
 
-router.get('/tasks/:taskGroupId', (req, res) => {
-    const { taskGroupId } = req.params;
+router.get('/tasks/group/:task_group_id', (req, res) => {
+    const { task_group_id } = req.params;
+    if (!task_group_id) {
+        return res.status(400).json({ message: 'Task group ID is required' });
+    }
 
-    getTasksByGroupId(taskGroupId, (err, tasks) => {
+    getTasksByGroupId(task_group_id, (err, tasks) => {
         if (err) {
-            return res.status(500).json({ message: 'Error fetching tasks', error: err });
-        }
-        if (tasks.length === 0) {
-            return res.status(404).json({ message: 'No tasks found for this group' });
+            return res.status(500).json({ message: 'Error fetching tasks by group', error: err });
         }
         res.status(200).json(tasks);
     });

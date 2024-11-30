@@ -36,9 +36,19 @@ const deleteTaskGroup = (taskGroupId, callback) => {
     });
 };
 
+const updateTaskGroup = (taskGroupId, name, description, callback) => {
+    TaskGroup.updateTaskGroup(taskGroupId, name, description, (err, results) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, results);
+    });
+};
+
 module.exports = {
     addTaskGroup,
     getAllTaskGroups,
     getTaskGroupsByDirection,
-    deleteTaskGroup
+    deleteTaskGroup,
+    updateTaskGroup,
 };

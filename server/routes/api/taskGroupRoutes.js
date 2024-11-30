@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { addTaskGroup, getAllTaskGroups, getTaskGroupsByDirection, deleteTaskGroup } = require('../../controllers/taskGroupController');
+const {
+    addTaskGroup,
+    getAllTaskGroups,
+    getTaskGroupsByDirection,
+    deleteTaskGroup,
+    updateTaskGroup // Импорт функции обновления
+} = require('../../controllers/taskGroupController');
 
 router.post('/task_groups', (req, res) => {
     const { direction_id, name, description } = req.body;
@@ -47,6 +53,25 @@ router.delete('/task_groups/:taskGroupId', (req, res) => {
             return res.status(404).json({ message: 'Task group not found' });
         }
         res.status(200).json({ message: 'Task group deleted successfully' });
+    });
+});
+
+router.put('/task_groups/:taskGroupId', (req, res) => {
+    const { taskGroupId } = req.params;
+    const { name, description } = req.body;
+
+    if (!name || !description) {
+        return res.status(400).json({ message: 'Name and description are required' });
+    }
+
+    updateTaskGroup(taskGroupId, name, description, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error updating task group', error: err });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Task group not found' });
+        }
+        res.status(200).json({ message: 'Task group updated successfully' });
     });
 });
 

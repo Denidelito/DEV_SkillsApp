@@ -85,7 +85,6 @@ const closeModal = () => {
         <th>id</th>
         <th>name</th>
         <th>description</th>
-        <th>update</th>
         <th>actions</th>
       </tr>
       </thead>
@@ -98,7 +97,6 @@ const closeModal = () => {
           </router-link>
         </td>
         <td>{{ direction.description }}</td>
-        <td>{{ direction.updated_at }}</td>
         <td>
           <button @click="openDeleteModal(direction.id)" class="button button--small button--danger">Удалить</button>
           <button @click="openEditModal(direction)" class="button button--small">Редактировать</button>
@@ -134,7 +132,7 @@ const closeModal = () => {
             <input id="direction-name" v-model="editDirection.name" type="text" class="input" />
           </div>
           <div class="input">
-            <label for="direction-description">Описание:</label>
+            <label>Описание:</label>
             <textarea id="direction-description" v-model="editDirection.description" class="textarea"></textarea>
           </div>
         </div>

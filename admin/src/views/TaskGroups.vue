@@ -30,6 +30,10 @@ const handleDeleteGroup = async (groupId) => {
   await groupsStore.deleteGroup(groupId);
 };
 
+const handleUpdateGroup = async(groupId, name, description) => {
+  await groupsStore.updateGroup(groupId, name, description)
+}
+
 const openModal = () => {
   isModalOpen.value = true;
 };
@@ -44,7 +48,7 @@ const closeModal = () => {
 
 <template>
   <div>
-    <button class="button" @click="openModal">Добавить квест</button>
+    <button class="button" @click="openModal">Добавить группу</button>
 
     <div v-if="isModalOpen" class="modal-overlay">
       <div class="modal">
@@ -67,12 +71,14 @@ const closeModal = () => {
         </form>
       </div>
     </div>
-
     <GroupList
+        :directionId="directionId"
         :groups="groupsStore.groups"
         :errorMessage="groupsStore.errorMessage"
         :successMessage="groupsStore.successMessage"
         :onDeleteGroup="handleDeleteGroup"
+        :onUpdateGroup="handleUpdateGroup"
     />
+
   </div>
 </template>
