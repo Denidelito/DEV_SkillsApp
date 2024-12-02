@@ -7,10 +7,7 @@ const tasksStore = useTasksStore();
 const tasks = ref([]);
 const route = useRoute();
 const taskGroupId = ref(route.params.taskGroupId);
-
-
 const newTaskData = ref('');
-
 
 onMounted(() => {
   tasksStore.fetchTasksByGroup(taskGroupId.value)
@@ -52,10 +49,9 @@ const addTask = () => {
       <button @click="addTask">Add Task</button>
     </div>
 
-    <!-- Список задач -->
     <ul>
       <li v-for="task in tasks" :key="task.id">
-        <p>Task ID: {{ task.id }}</p>
+        <p>Вопрос {{ task.id }}</p>
         <p>Task Data: {{ task.task_data }}</p>
       </li>
     </ul>

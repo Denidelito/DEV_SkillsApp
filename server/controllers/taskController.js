@@ -27,8 +27,18 @@ const getTasksByGroupId = (taskGroupId, callback) => {
     });
 };
 
+const deleteTaskById = (taskId, callback) => {
+    Task.deleteTaskById(taskId, (err, results) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, results);
+    });
+};
+
 module.exports = {
     addTask,
     getAllTasks,
-    getTasksByGroupId
+    getTasksByGroupId,
+    deleteTaskById
 };

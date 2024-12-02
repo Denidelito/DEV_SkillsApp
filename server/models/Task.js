@@ -30,6 +30,16 @@ class Task {
             callback(null, results);
         });
     }
+
+    static deleteTaskById(taskId, callback) {
+        const query = 'DELETE FROM tasks WHERE id = ?';
+        db.query(query, [taskId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results);
+        });
+    }
 }
 
 module.exports = Task;
