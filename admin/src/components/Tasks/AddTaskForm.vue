@@ -22,6 +22,7 @@ const addTask = () => {
   if (newTaskData.value) {
     tasksStore.addTask(props.taskGroupId, newTaskData.value, 1)
         .then((response) => {
+          emit('task-added')
           newTaskData.value = { type: 'images', imageUrl: '', text: '', answer: '' };
         })
         .catch((error) => {

@@ -21,7 +21,12 @@ const startEditingTask = (task) => {
   <ul>
     <li v-for="task in tasks" :key="task.id">
       <p>Вопрос {{ task.id }}</p>
-      <p>Task Data: {{ task.task_data }}</p>
+      <hr>
+      <div>
+        <img :src="task.task_data.imageUrl" alt="">
+        <p>{{task.task_data.text}}</p>
+        <p>{{task.task_data.answer ? 'Верный' : 'Неверный' }}</p>
+      </div>
       <button @click="deleteTask(task.id)">Delete</button>
       <button @click="startEditingTask(task)">Edit</button>
     </li>
