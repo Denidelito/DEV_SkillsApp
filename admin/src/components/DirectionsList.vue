@@ -70,7 +70,6 @@ const closeModal = () => {
 
 <template>
   <div>
-    <!-- Error and Success Messages -->
     <div v-if="directionsStore.errorMessage" class="error-message">
       {{ directionsStore.errorMessage }}
     </div>

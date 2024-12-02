@@ -77,25 +77,6 @@ export const useTasksStore = defineStore('tasks', {
             }
         },
 
-        async deleteTask(taskId) {
-            this.clearMessages();
-            try {
-                const response = await axios.delete(`/api/tasks/${taskId}`, {
-                    headers: {
-                        Authorization: this.getAuthToken(),
-                    },
-                });
-
-                this.tasks = this.tasks.filter((task) => task.id !== taskId);
-
-                this.successMessage = 'Task deleted successfully!';
-                return response.data;
-            } catch (error) {
-                this.handleError(error);
-                return null;
-            }
-        },
-
         async updateTask(taskId, taskData) {
             this.clearMessages();
             try {
@@ -119,6 +100,23 @@ export const useTasksStore = defineStore('tasks', {
             } catch (error) {
                 this.handleError(error);
                 return null;
+            }
+        },
+
+        async deleteTask(taskId) {
+            this.clearMessages();
+            try {
+                await axios.delete(`/api/tasks/${taskId}`, {
+                    headers: {
+                        Authorization: this.getAuthToken(),
+                    },
+                });
+
+                this.tasks = this.tasks.filter((task) => task.id !== taskId);
+
+                this.successMessage = 'Task deleted successfully!';
+            } catch (error) {
+                this.handleError(error);
             }
         },
     },

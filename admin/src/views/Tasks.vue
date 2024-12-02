@@ -34,6 +34,16 @@ const addTask = () => {
         });
   }
 };
+
+const deleteTask = (taskId) => {
+  tasksStore.deleteTask(taskId)
+      .then(() => {
+        tasks.value = tasks.value.filter(task => task.id !== taskId);
+      })
+      .catch((error) => {
+        console.error('Error deleting task:', error);
+      });
+};
 </script>
 
 <template>
@@ -53,6 +63,7 @@ const addTask = () => {
       <li v-for="task in tasks" :key="task.id">
         <p>Вопрос {{ task.id }}</p>
         <p>Task Data: {{ task.task_data }}</p>
+        <button @click="deleteTask(task.id)">Delete</button>
       </li>
     </ul>
   </div>
