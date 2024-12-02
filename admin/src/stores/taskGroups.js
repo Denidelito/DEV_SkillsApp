@@ -95,13 +95,12 @@ export const useGroupsStore = defineStore('groups', {
             }
         },
 
-        async updateGroup(groupId, name, description) {
+        async updateTask(taskId, updatedTaskData) {
             this.clearMessages();
-
             try {
                 const response = await axios.put(
-                    `/api/task_groups/${groupId}`,
-                    { name, description },
+                    `/api/tasks/${taskId}`,
+                    { task_data: updatedTaskData.task_data },
                     {
                         headers: {
                             Authorization: this.getAuthToken(),
@@ -109,17 +108,18 @@ export const useGroupsStore = defineStore('groups', {
                     }
                 );
 
-                const groupIndex = this.groups.findIndex((group) => group.id === groupId);
-                if (groupIndex !== -1) {
-                    this.groups[groupIndex] = { ...this.groups[groupIndex], name, description };
+                const taskIndex = this.tasks.findIndex((task) => task.id === taskId);
+                if (taskIndex !== -1) {
+                    this.tasks[taskIndex] = { ...this.tasks[taskIndex], ...response.data };
                 }
 
-                this.successMessage = 'Group updated successfully!';
+                this.successMessage = 'Task updated successfully!';
                 return response.data;
             } catch (error) {
                 this.handleError(error);
                 return null;
             }
-        },
+        }
+
     },
 });

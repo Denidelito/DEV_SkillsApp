@@ -40,6 +40,16 @@ class Task {
             callback(null, results);
         });
     }
+
+    static updateTaskById(taskId, updatedTaskData, callback) {
+        const query = 'UPDATE tasks SET task_data = ?, updated_at = NOW() WHERE id = ?';
+        db.query(query, [updatedTaskData, taskId], (err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            callback(null, results);
+        });
+    }
 }
 
 module.exports = Task;

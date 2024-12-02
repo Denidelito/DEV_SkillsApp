@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addTask, getAllTasks, getTasksByGroupId, deleteTaskById } = require('../../controllers/taskController');
+const { addTask, getAllTasks, getTasksByGroupId, deleteTaskById, updateTaskById } = require('../../controllers/taskController');
 
 router.post('/tasks', (req, res) => {
     const { task_group_id, task_data, admin_id } = req.body;
@@ -53,6 +53,25 @@ router.delete('/tasks/:task_id', (req, res) => {
             return res.status(404).json({ message: 'Task not found' });
         }
         res.status(200).json({ message: 'Task deleted successfully' });
+    });
+});
+
+router.put('/tasks/:task_id', (req, res) => {
+    const { task_id } = req.params;
+    const { task_data } = req.body;
+
+    if (!task_id || !task_data) {
+        return res.status(400).json({ message: 'Task ID and updated task data are required' });
+    }
+
+    updateTaskById(task_id, task_data, (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: 'Error updating task', error: err });
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+        res.status(200).json({ message: 'Task updated successfully' });
     });
 });
 

@@ -36,9 +36,19 @@ const deleteTaskById = (taskId, callback) => {
     });
 };
 
+const updateTaskById = (taskId, updatedTaskData, callback) => {
+    Task.updateTaskById(taskId, updatedTaskData, (err, results) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, results);
+    });
+};
+
 module.exports = {
     addTask,
     getAllTasks,
     getTasksByGroupId,
-    deleteTaskById
+    deleteTaskById,
+    updateTaskById
 };
