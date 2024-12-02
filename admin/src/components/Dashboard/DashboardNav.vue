@@ -1,11 +1,23 @@
 <script setup>
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 </script>
 
 <template>
   <div class="dashboard-nav">
-    <router-link to="/admin/users">Пользователи</router-link>
-    <router-link to="/admin/directions">Направления</router-link>
+    <router-link
+        to="/admin/users"
+        :class="{ 'router-link-active': route.path.startsWith('/admin/users') }"
+    >
+      Пользователи
+    </router-link>
+    <router-link
+        to="/admin/directions"
+        :class="{ 'router-link-active': route.path.startsWith('/admin/directions') }"
+    >
+      Направления
+    </router-link>
   </div>
 </template>
 
@@ -38,5 +50,4 @@
     }
   }
 }
-
 </style>

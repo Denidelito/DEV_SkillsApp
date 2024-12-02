@@ -18,17 +18,17 @@ const startEditingTask = (task) => {
 </script>
 
 <template>
-  <ul>
-    <li v-for="task in tasks" :key="task.id">
-      <p>Вопрос {{ task.id }}</p>
-      <hr>
-      <div>
-        <img :src="task.task_data.imageUrl" alt="">
-        <p>{{task.task_data.text}}</p>
-        <p>{{task.task_data.answer ? 'Верный' : 'Неверный' }}</p>
-      </div>
+  <div v-for="(task, index) in tasks" :key="task.id">
+    <p>
+      Вопрос {{ index + 1 }}
       <button @click="deleteTask(task.id)">Delete</button>
       <button @click="startEditingTask(task)">Edit</button>
-    </li>
-  </ul>
+    </p>
+    <hr>
+    <div>
+      <img width="200" :src="task.task_data.imageUrl" alt="">
+      <p>{{task.task_data.text}}</p>
+      <p>{{task.task_data.answer === 'true' ? 'Верный' : 'Неверный' }}</p>
+    </div>
+  </div>
 </template>

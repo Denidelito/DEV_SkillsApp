@@ -47,8 +47,10 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div>
-    <button class="button" @click="openModal">Добавить группу</button>
+  <div class="group-container">
+    <div>
+      <button class="button" @click="openModal">Добавить группу</button>
+    </div>
 
     <div v-if="isModalOpen" class="modal-overlay">
       <div class="modal">
@@ -71,6 +73,7 @@ const closeModal = () => {
         </form>
       </div>
     </div>
+
     <GroupList
         :directionId="directionId"
         :groups="groupsStore.groups"
@@ -79,6 +82,13 @@ const closeModal = () => {
         :onDeleteGroup="handleDeleteGroup"
         :onUpdateGroup="handleUpdateGroup"
     />
-
   </div>
 </template>
+
+<style lang="scss" scoped>
+  .group-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+</style>

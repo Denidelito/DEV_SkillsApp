@@ -60,8 +60,6 @@ onMounted(fetchTasks);
 
 <template>
   <div>
-    <h2>Tasks List for Group {{ taskGroupId }}</h2>
-
     <div v-if="tasksStore.errorMessage" class="error-message">
       {{ tasksStore.errorMessage }}
     </div>
@@ -69,7 +67,7 @@ onMounted(fetchTasks);
       {{ tasksStore.successMessage }}
     </div>
 
-    <button @click="showAddModal = true">Add Task</button>
+    <button class="button" @click="showAddModal = true">Добавить задание</button>
 
     <TaskList :tasks="tasks" @delete-task="deleteTask" @start-editing-task="startEditingTask" />
 

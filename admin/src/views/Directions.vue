@@ -65,7 +65,9 @@ const closeModal = () => {
     </div>
   </div>
 
-  <button class="button" @click="openModal">Добавить направление</button>
+  <div>
+    <button class="button" @click="openModal">Добавить направление</button>
+  </div>
   <directions-list/>
 </template>
 

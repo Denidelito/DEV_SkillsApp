@@ -1,6 +1,7 @@
 <script setup>
 import DashboardHeader from "../components/Dashboard/DashboardHeader.vue";
 import DashboardNav from "../components/Dashboard/DashboardNav.vue";
+import Breadcrumbs from "../components/Breadcrumbs.vue";
 
 </script>
 
@@ -10,6 +11,7 @@ import DashboardNav from "../components/Dashboard/DashboardNav.vue";
     <div class="dashboard-body">
       <dashboard-nav/>
       <div class="dashboard-container">
+        <Breadcrumbs/>
         <router-view/>
       </div>
     </div>
@@ -28,9 +30,13 @@ import DashboardNav from "../components/Dashboard/DashboardNav.vue";
     }
 
     &-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
       width: calc(100% - 300px);
       box-sizing: border-box;
       padding: 20px;
+      overflow-y: scroll;
     }
 
   }

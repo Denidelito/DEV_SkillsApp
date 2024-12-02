@@ -47,7 +47,9 @@ const addUser = async () => {
 </script>
 
 <template>
-  <button class="button" @click="openModal">Добавить пользователя</button>
+  <div>
+    <button class="button" @click="openModal">Добавить пользователя</button>
+  </div>
 
   <div v-if="isModalOpen" class="modal-overlay">
     <div class="modal">
@@ -77,3 +79,7 @@ const addUser = async () => {
 
   <users-list/>
 </template>
+
+<style>
+
+</style>

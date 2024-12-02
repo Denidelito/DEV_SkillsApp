@@ -53,7 +53,7 @@ const addTask = () => {
       <label>
         <input
             type="radio"
-            value="true"
+            :value="true"
             v-model="newTaskData.answer"
         />
         Yes
@@ -61,7 +61,7 @@ const addTask = () => {
       <label>
         <input
             type="radio"
-            value="false"
+            :value="false"
             v-model="newTaskData.answer"
         />
         No
