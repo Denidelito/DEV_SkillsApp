@@ -49,7 +49,7 @@ const closeModal = () => {
 <template>
   <div class="group-container">
     <div>
-      <button class="button" @click="openModal">Добавить группу</button>
+      <button class="button" @click="openModal">Добавить набор заданий</button>
     </div>
 
     <div v-if="isModalOpen" class="modal-overlay">

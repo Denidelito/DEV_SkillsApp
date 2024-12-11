@@ -15,7 +15,7 @@ const logout = () => {
   <div class="dashboard-header">
     <div>Панель администратора</div>
     <div>
-      <button class="button" @click="logout">Logout</button>
+      <button class="button" @click="logout">Выход</button>
     </div>
   </div>
 </template>

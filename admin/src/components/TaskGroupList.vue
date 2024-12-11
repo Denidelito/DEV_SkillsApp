@@ -52,8 +52,17 @@ const handleUpdate = () => {
 
 <template>
   <div>
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-    <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+    <div v-if="errorMessage" class="message message-error">
+      <div class="message-content">
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <div v-if="successMessage" class="message message-success">
+      <div class="message-content">
+        {{ successMessage }}
+      </div>
+    </div>
 
     <table v-if="groups.length > 0" class="table">
       <thead>

@@ -70,11 +70,16 @@ const closeModal = () => {
 
 <template>
   <div>
-    <div v-if="directionsStore.errorMessage" class="error-message">
-      {{ directionsStore.errorMessage }}
+    <div v-if="directionsStore.errorMessage" class="message message-error">
+      <div class="message-content">
+        {{ directionsStore.errorMessage }}
+      </div>
     </div>
-    <div v-if="directionsStore.successMessage" class="success-message">
-      {{ directionsStore.successMessage }}
+
+    <div v-if="directionsStore.successMessage" class="message message-success">
+      <div class="message-content">
+        {{ directionsStore.successMessage }}
+      </div>
     </div>
 
     <!-- Directions Table -->

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useTasksStore } from '../../stores/tasks';
 
 const props = defineProps({
@@ -11,63 +11,141 @@ const props = defineProps({
 
 const emit = defineEmits(['task-added']);
 const tasksStore = useTasksStore();
+
+// Тип задачи
+const taskType = ref('pick-images');
+
+// Объект данных для новой задачи
 const newTaskData = ref({
-  type: 'images',
+  type: taskType.value,
   imageUrl: '',
   text: '',
-  answer: '',
+  answers: [],
+  feedback: '',
 });
 
+// Синхронизация типа задачи с newTaskData.type
+watch(taskType, (newType) => {
+  newTaskData.value.type = newType;
+});
+
+// Функция для добавления задачи
 const addTask = () => {
   if (newTaskData.value) {
-    tasksStore.addTask(props.taskGroupId, newTaskData.value, 1)
-        .then((response) => {
-          emit('task-added')
-          newTaskData.value = { type: 'images', imageUrl: '', text: '', answer: '' };
+    tasksStore
+        .addTask(props.taskGroupId, newTaskData.value, 1)
+        .then(() => {
+          emit('task-added');
+          newTaskData.value = {
+            type: taskType.value,
+            imageUrl: '',
+            text: '',
+            answers: [],
+            feedback: '',
+          };
         })
         .catch((error) => {
           console.error('Error adding task:', error);
         });
   }
 };
+
+// Добавление нового ответа
+const addAnswer = () => {
+  newTaskData.value.answers.push({text: '', isCorrect: false});
+};
+
+// Установка правильного ответа
+const setCorrectAnswer = (index) => {
+  newTaskData.value.answers.forEach((answer, i) => {
+    answer.isCorrect = i === index;
+  });
+};
 </script>
 
 <template>
   <div>
+    <!-- Селект для выбора типа задачи -->
     <div class="input">
-      <label for="">Ссылка на изображение</label>
-      <input
-          type="text"
-          v-model="newTaskData.imageUrl"
-          placeholder="Enter image URL"
-      />
+      <label for="task-type">Выберите тип задачи:</label>
+      <select id="task-type" v-model="taskType">
+        <option value="pick-images">Pick Images</option>
+        <option value="question-one">Question One</option>
+      </select>
     </div>
-    <div class="input">
-      <label for="">Введите описание</label>
-      <textarea
-          v-model="newTaskData.text"
-          placeholder="Enter task text"
-      ></textarea>
-    </div>
-    <div class="input">
-      <label>
+
+    <!-- Форма для типа pick-images -->
+    <div v-if="taskType === 'pick-images'">
+      <div class="input">
+        <label for="image-url">Ссылка на изображение</label>
         <input
-            type="radio"
-            :value="true"
-            v-model="newTaskData.answer"
+            type="text"
+            id="image-url"
+            v-model="newTaskData.imageUrl"
+            placeholder="Enter image URL"
         />
-        Yes
-      </label>
-      <label>
-        <input
-            type="radio"
-            :value="false"
-            v-model="newTaskData.answer"
-        />
-        No
-      </label>
+      </div>
+      <!-- Общее поле обратной связи -->
+      <div class="input">
+        <label for="feedback">Введите обратную связь (опционально)</label>
+        <textarea
+            id="feedback"
+            v-model="newTaskData.feedback"
+            placeholder="Enter feedback for the task"
+        ></textarea>
+      </div>
+      <div class="input">
+        <label>
+          <input type="radio" :value="true" v-model="newTaskData.answer"/>
+          Yes
+        </label>
+        <label>
+          <input type="radio" :value="false" v-model="newTaskData.answer"/>
+          No
+        </label>
+      </div>
     </div>
+
+    <!-- Форма для типа question-one -->
+    <div v-if="taskType === 'question-one'">
+      <div class="input">
+        <label for="question-text">Введите вопрос</label>
+        <textarea
+            id="question-text"
+            v-model="newTaskData.text"
+            placeholder="Enter question"
+        ></textarea>
+      </div>
+      <!-- Общее поле обратной связи -->
+      <div class="input">
+        <label for="feedback">Введите обратную связь (опционально)</label>
+        <textarea
+            id="feedback"
+            v-model="newTaskData.feedback"
+            placeholder="Enter feedback for the task"
+        ></textarea>
+      </div>
+      <div v-for="(answer, index) in newTaskData.answers" :key="index" class="input">
+        <label>Ответ {{ index + 1 }}</label>
+        <input
+            type="text"
+            v-model="answer.text"
+            placeholder="Enter answer text"
+        />
+        <label>
+          <input
+              type="radio"
+              name="correct-answer"
+              :checked="answer.isCorrect"
+              @change="setCorrectAnswer(index)"
+          />
+          Верный
+        </label>
+      </div>
+      <button @click="addAnswer">Добавить ответ</button>
+    </div>
+
+
     <button @click="addTask">Add Task</button>
-    <slot></slot>
   </div>
 </template>
