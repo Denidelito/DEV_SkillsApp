@@ -16,7 +16,6 @@ const startEditingTask = (task) => {
   emit('start-editing-task', task);
 };
 
-console.log(props.tasks)
 </script>
 
 <template>

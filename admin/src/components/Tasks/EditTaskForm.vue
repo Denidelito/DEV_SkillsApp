@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch} from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   task: {
@@ -20,69 +20,119 @@ watch(
 );
 
 const saveTask = () => {
-  if (validateTask(editableTask.value.task_data)) {
-    emit('save-task', editableTask.value);
-  } else {
-    console.error('Validation Error: All fields are required.');
-  }
+  emit('save-task', editableTask.value);
 };
 
 const cancelEdit = () => {
   emit('cancel-edit');
 };
 
-const validateTask = (taskData) => {
-  return (
-      taskData.imageUrl &&
-      taskData.text &&
-      (taskData.answer === 'true' || taskData.answer === 'false')
-  );
+const addAnswer = () => {
+  editableTask.value.task_data.answers.push({ text: '', isCorrect: false });
+};
+
+const removeAnswer = (index) => {
+  // Удаление ответа
+  editableTask.value.task_data.answers.splice(index, 1);
+};
+
+const setCorrectAnswer = (index) => {
+  editableTask.value.task_data.answers.forEach((answer, i) => {
+    answer.isCorrect = i === index;
+  });
 };
 </script>
 
 <template>
   <div>
     <h3>Edit Task</h3>
-    <div class="input">
-      <label for="image-url">Ссылка на изображение</label>
-      <input
-          id="image-url"
-          type="text"
-          v-model="editableTask.task_data.imageUrl"
-          placeholder="Enter image URL"
-          aria-required="true"
-      />
-    </div>
-    <div class="input">
-      <label for="task-text">Введите описание</label>
-      <textarea
-          id="task-text"
-          v-model="editableTask.task_data.text"
-          placeholder="Enter task text"
-          aria-required="true"
-      ></textarea>
-    </div>
-    <div class="input">
-      <span>Выберите правильный ответ:</span>
-      <label>
+<!--    <div class="input">
+      <label for="task-type">Выберите тип задачи:</label>
+      <select id="task-type" v-model="editableTask.type">
+        <option value="pick-images">Pick Images</option>
+        <option value="question-one">Question One</option>
+      </select>
+    </div>-->
+
+    <div v-if="props.task.task_data.type === 'pick-images'">
+      <div class="input">
+        <label for="feedback">Обратная связь</label>
         <input
-            type="radio"
-            value="true"
-            v-model="editableTask.task_data.answer"
-            aria-checked="editableTask.task_data.answer === 'true'"
+            id="feedback"
+            type="text"
+            v-model="editableTask.task_data.feedback"
+            placeholder="Enter feedback"
         />
-        Yes
-      </label>
-      <label>
+      </div>
+      <div class="input">
+        <label for="image-url">Ссылка на изображение</label>
         <input
-            type="radio"
-            value="false"
-            v-model="editableTask.task_data.answer"
-            aria-checked="editableTask.task_data.answer === 'false'"
+            id="image-url"
+            type="text"
+            v-model="editableTask.task_data.imageUrl"
+            placeholder="Enter image URL"
         />
-        No
-      </label>
+      </div>
+      <div class="input">
+        <label>Выберите правильный ответ:</label>
+        <label>
+          <input
+              type="radio"
+              value="true"
+              v-model="editableTask.task_data.answer"
+          />
+          Yes
+        </label>
+        <label>
+          <input
+              type="radio"
+              value="false"
+              v-model="editableTask.task_data.answer"
+          />
+          No
+        </label>
+      </div>
     </div>
+
+    <div v-if="props.task.task_data.type === 'question-one'">
+      <div class="input">
+        <label for="task-text">Введите описание</label>
+        <textarea
+            id="task-text"
+            v-model="editableTask.task_data.text"
+            placeholder="Enter task text"
+        ></textarea>
+      </div>
+      <div class="input">
+        <label for="feedback">Обратная связь</label>
+        <input
+            id="feedback"
+            type="text"
+            v-model="editableTask.task_data.feedback"
+            placeholder="Enter feedback"
+        />
+      </div>
+      <div v-for="(answer, index) in editableTask.task_data.answers" :key="index" class="input">
+        <label>Ответ {{ index + 1 }}</label>
+        <input
+            type="text"
+            v-model="answer.text"
+            placeholder="Введите текст ответа"
+        />
+        <label>
+          <input
+              type="radio"
+              name="correct-answer"
+              :checked="answer.isCorrect"
+              @change="setCorrectAnswer(index)"
+          />
+          Верный
+        </label>
+        <button @click="removeAnswer(index)">Удалить</button>
+      </div>
+      <button @click="addAnswer">Добавить ответ</button>
+    </div>
+
     <button @click="saveTask">Save</button>
     <button @click="cancelEdit">Cancel</button>
   </div>
