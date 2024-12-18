@@ -1,30 +1,40 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { useAuthStore } from './stores/auth';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const handleLogout = () => {
+  authStore.logout();
+  router.push('/auth/login');
+};
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div id="app">
+    <nav>
+      <button v-if="authStore.isAuthenticated" @click="handleLogout">Logout</button>
+    </nav>
+    <router-view></router-view>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style>
+nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+button {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+button:hover {
+  background-color: #f0f0f0;
 }
 </style>

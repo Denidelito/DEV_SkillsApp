@@ -21,6 +21,7 @@ const loginUser = async (req, res) => {
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+
             if (!isPasswordValid) {
                 return res.status(400).json({ message: 'Invalid username or password' });
             }
@@ -35,7 +36,7 @@ const loginUser = async (req, res) => {
             if (user.role === 'admin') {
                 return res.status(200).json({ message: 'Admin login successful', token, role: 'admin' });
             } else if (user.role === 'user') {
-                return res.status(200).json({ message: 'User login successful', token, role: 'user' });
+                return res.status(200).json({ message: 'User login successful', token, role: 'user', username: username, userId: user.id });
             } else {
                 return res.status(403).json({ message: 'Access denied: Invalid role' });
             }

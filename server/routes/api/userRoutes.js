@@ -6,6 +6,7 @@ const { addUser, getAllUsers, deleteUser } = require('../../controllers/userCont
 router.post('/users', async (req, res) => {
     const { username, password, role } = req.body;
 
+
     if (!username || !role) {
         return res.status(400).json({ message: 'Username and role are required' });
     }
@@ -15,7 +16,7 @@ router.post('/users', async (req, res) => {
     }
 
     try {
-        await addUser(username, password || null, role, (err, results) => {
+        await addUser(username, password !== null ? password : '111', role, (err, results) => {
             if (err) {
                 return res.status(500).json({ message: 'Error adding user', error: err });
             }
