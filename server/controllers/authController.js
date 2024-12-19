@@ -30,7 +30,7 @@ const loginUser = async (req, res) => {
             const token = jwt.sign(
                 { userId: user.id, role: user.role },
                 process.env.JWT_SECRET_KEY,
-                { expiresIn: '1h' }
+                /*{ expiresIn: '24h' }*/
             );
 
             if (user.role === 'admin') {

@@ -1,0 +1,59 @@
+@font-face {
+  font-family: 'Unbounded';
+  src: url('./fonts/Unbounded-Regular.woff2') format('woff2'),
+  url('./fonts/Unbounded-Regular.woff') format('woff'),
+  url('./fonts/Unbounded-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('./fonts/Unbounded-Medium.woff2') format('woff2'),
+  url('./fonts/Unbounded-Medium.woff') format('woff'),
+  url('./fonts/Unbounded-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('./fonts/Unbounded-SemiBold.woff2') format('woff2'),
+  url('./fonts/Unbounded-SemiBold.woff') format('woff'),
+  url('./fonts/Unbounded-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Unbounded';
+  src: url('./fonts/Unbounded-Bold.woff2') format('woff2'),
+  url('./fonts/Unbounded-Bold.woff') format('woff'),
+  url('./fonts/Unbounded-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NunitoSans';
+  src: url('./fonts/NunitoSans-Regular.woff2') format('woff2'),
+  url('./fonts/NunitoSans-Regular.woff') format('woff'),
+  url('./fonts/NunitoSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NunitoSans';
+  src: url('./fonts/NunitoSans-SemiBold.woff2') format('woff2'),
+  url('./fonts/NunitoSans-SemiBold.woff') format('woff'),
+  url('./fonts/NunitoSans-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NunitoSans';
+  src: url('./fonts/NunitoSans-Bold.woff2') format('woff2'),
+  url('./fonts/NunitoSans-Bold.woff') format('woff'),
+  url('./fonts/NunitoSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}

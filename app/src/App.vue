@@ -12,12 +12,10 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <div id="app">
-    <nav>
-      <button v-if="authStore.isAuthenticated" @click="handleLogout">Logout</button>
-    </nav>
-    <router-view></router-view>
-  </div>
+<!--  <nav>
+    <button v-if="authStore.isAuthenticated" @click="handleLogout">Logout</button>
+  </nav>-->
+  <router-view></router-view>
 </template>
 
 <style>

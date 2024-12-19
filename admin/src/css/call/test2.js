@@ -1,835 +1,372 @@
 window.addEventListener('load', function() {
+    const DATA = [
+        {
+            question: 'Он начал учиться вождению 3.06',
+            answers: [
+                {
+                    id: '1',
+                    value: 'третье июня',
+                    correct: false,
+                },
+                {
+                    id: '2',
+                    value: 'третьего июня',
+                    correct: true,
+                },
+                {
+                    id: '3',
+                    value: 'три июня',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Когда ты&nbsp;отвез пассажира? Я&nbsp;отвез пассажира 15.01',
+            answers: [
+                {
+                    id: '1',
+                    value: 'пятнадцатого января',
+                    correct: true,
+                },
+                {
+                    id: '2',
+                    value: 'пятнадцатое января',
+                    correct: false,
+                },
+                {
+                    id: '3',
+                    value: 'пятнадцать января',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Антон начал выполнять заказы …',
+            answers: [
+                {
+                    id: '1',
+                    value: 'седьмое октября',
+                    correct: false,
+                },
+                {
+                    id: '2',
+                    value: 'седьмого октября',
+                    correct: true,
+                },
+                {
+                    id: '3',
+                    value: 'семь октября',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Я&nbsp;сел за&nbsp;руль в ______ (1987)',
+            answers: [
+                {
+                    id: '1',
+                    value: 'в тысяча девятьсот восемьдесят седьмом году',
+                    correct: true,
+                },
+                {
+                    id: '2',
+                    value: 'тысяча девятьсот восемьдесят седьмой год',
+                    correct: false,
+                },
+                {
+                    id: '3',
+                    value: 'в тысяча девятьсот восемьдесят восемь года',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Я вожу автомобиль с 2023 года.',
+            answers: [
+                {
+                    id: '1',
+                    value: 'две тысячи двадцать третьем году',
+                    correct: false,
+                },
+                {
+                    id: '2',
+                    value: 'с две тысячи двадцать третьего года',
+                    correct: true,
+                },
+                {
+                    id: '3',
+                    value: 'две тысячи двадцать третьего году',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Я купил свою первую машину в 2000',
+            answers: [
+                {
+                    id: '1',
+                    value: 'в двухтысячном году',
+                    correct: true,
+                },
+                {
+                    id: '2',
+                    value: 'двух тысяч года',
+                    correct: false,
+                },
+                {
+                    id: '3',
+                    value: 'двухтысячным годом',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Когда ты&nbsp;арендовал машину? Я&nbsp;арендую автомобиль _______ (23.04.2024)',
+            answers: [
+                {
+                    id: '1',
+                    value: 'двадцать третье апреля две тысячи двадцать четвертого года',
+                    correct: false,
+                },
+                {
+                    id: '2',
+                    value: 'с двадцать третьего апреля две тысячи двадцать четвертого года',
+                    correct: true,
+                },
+                {
+                    id: '3',
+                    value: 'с двадцать третьего апреля две тысячи двадцать четвертого год',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Я выполняю заказы здесь  _______ (23.04.2007)',
+            answers: [
+                {
+                    id: '1',
+                    value: 'двадцать третье апреля две тысячи седьмого года',
+                    correct: false,
+                },
+                {
+                    id: '2',
+                    value: 'с двадцать третьего апреля две тысячи седьмого года',
+                    correct: true,
+                },
+                {
+                    id: '3',
+                    value: 'с двадцать третьего апреля две тысячи седьмой год',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Анна получила права  _______ (2000)',
+            answers: [
+                {
+                    id: '1',
+                    value: 'в двухтысячном году',
+                    correct: true,
+                },
+                {
+                    id: '2',
+                    value: 'двух тысяч года',
+                    correct: false,
+                },
+                {
+                    id: '3',
+                    value: 'двухтысячным годом',
+                    correct: false,
+                }
+            ]
+        },
+        {
+            question: 'Мы записались на курс  25.07',
+            answers: [
+                {
+                    id: '1',
+                    value: 'двадцать пятого июля',
+                    correct: true,
+                },
+                {
+                    id: '2',
+                    value: 'двадцать пятое июля',
+                    correct: false,
+                },
+                {
+                    id: '3',
+                    value: 'двадцать пять июля',
+                    correct: false,
+                }
+            ]
+        }
+    ]
+
     const test = document.querySelector('.test')
-    const testProgress = document.querySelector('.test_progress')
     const questions = document.querySelector('.questions')
     const btnSubmit = document.querySelector('.btn_submit')
-// const indicator = document.querySelector('.test_indicator')
+    const btnNext = document.querySelector('.btn_next')
+    const indicator = document.querySelector('.test_indicator')
     const progress = document.querySelector('.progress_inner')
     const resultsBlock = document.querySelector('.results')
     const results = document.querySelector('.results_inner')
-    const formBtn = document.querySelector('#btn_link')
-    const img1 = document.querySelector('#img-1')
-    const img2 = document.querySelector('#img-2')
-    const img3 = document.querySelector('#img-3')
-    const img4 = document.querySelector('#img-4')
-    const img5 = document.querySelector('#img-5')
-    const img6 = document.querySelector('#img-6')
-    const img7 = document.querySelector('#img-7')
-    const img8 = document.querySelector('#img-8')
+    const btnsControl = document.querySelector('#btns_control')
+    const btnDownload = document.querySelector('#download-test')
+    const title = document.querySelector('.test_title')
 
-    formBtn.classList.add('hide')
-
-    const images = [img1, img2, img3, img4, img5, img6, img7, img8]
-
-    images.forEach((el) => el.classList.add('hide'))
-
-    let questionsLenght = 8
-
-    btnSubmit.addEventListener('click', () => {
-            yaCounter97914413.reachGoal('test_sotrudnichestvo_button_click')
-        }
-    )
-
-// const renderIndicator = (currentStep) => {
-//   indicator.innerHTML = `${currentStep}/${questionsLenght}`
-// }
-
-    const renderProgress = (index) => {
-        progress.style.width = `${Math.round((index / questionsLenght) * 100)}%`
-    }
+    let currentIndex = 0
+    let answersCount = 0
+    let testCount = 1
 
     const renderQuestions = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
+        btnSubmit.disabled = true
+        renderIndicator(index + 1)
+        currentIndex = index
 
-        images.forEach((el) => el.classList.add('hide'))
+        const renderAnswers = () => DATA[index].answers
+            .map((answer) => `
+              <li class="test_item" id="test_item-${answer.id}" data-name=${answer.id} value=${answer.id}>
+                ${answer.value}
+              </li>
+            `)
+            .join('')
 
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        questions.innerHTML = ``
-
-        let question2 = `
+        questions.innerHTML = ` 
     <div>     
-        <p class="question_text">Sizda Rossiyada berilgan 
-haydovchilik guvohnomasi bormi?</p>
-        <ul class="test_list">
-          <li class="test_item" data-id="2" data-value="script-1-final">ha</li>
-          <li class="test_item" data-id="2" data-value="script-1-1">yoʻq</li>
-        </ul>
+      <p class="question_text">${DATA[index].question}</p>
+        <ul class="test_list">${renderAnswers()}</ul>
     </div>
+  `
+    }
+
+    const renderIndicator = (currentStep) => {
+        indicator.innerHTML = `${currentStep}/${DATA.length}`
+    }
+
+    const renderProgress = (index) => {
+        progress.style.width = `${Math.round(((index) / DATA.length) * 100)}%`
+    }
+
+    let currentItem = {}
+    let isSelected = false
+
+    const showResults = (index, value, item) => {
+        //Показываем ошибку, если ответ неправильный
+        if(!DATA[index].answers[value].correct) {
+            item.classList.add('test_item--wrong')
+        }
+
+        if(DATA[index].answers[value].correct) {
+            answersCount++
+        }
+
+        //Показывваем правильный ответ
+        DATA[index].answers.forEach((el) => {
+            if(el.correct) {
+                const item = document.querySelector(`#test_item-${el.id}`)
+                item.classList.add('test_item--right')
+            }
+        })
+
+        renderProgress(currentIndex + 1)
+        btnNext.classList.remove('hide')
+        btnSubmit.classList.add('hide')
+        btnSubmit.disabled = true
+
+        return answersCount
+    }
+
+//Показываем тоговый результат
+    const renderResults = (answers, questionsCount) => {
+        resultsBlock.classList.remove('hide')
+        btnNext.classList.add('hide')
+        questions.classList.add('hide')
+        title.classList.add('hide')
+        if(btnsControl) btnsControl.style.display = 'grid'
+        if(btnDownload) btnDownload.style.display = 'grid'
+
+        let content2 = `
+        <span class="result_points">
+          ${answers} туура жооптун ичинен ${questionsCount} 
+        </span>
+        <span class="results_footer">
+            Куттуктайбыз! Сиз суроолордун баарына туура жооп бердиңиз!
+        </span>
   `
 
         let content = `
-    <div>     
-      <p class="question_text">Yoshingiz nechada?</p>
-        <ul class="test_list">
-        <li class="test_item" data-id="1" data-value="script18">18 dan kam</li>
-        <li class="test_item" data-id="1" data-value="script-2">18 – 21</li>
-        <li class="test_item" data-id="1" data-value="script-3">21 va undan yuqori</li>
-        </ul>
-    </div>
-  `
+        <span class="result_points">
+          ${answers} туура жооптун ичинен ${questionsCount}
+        </span>
+        <span class="results_footer">
+            Куттуктайбыз! Ишти эң жакшы аткардыңыз!
+        </span>
+   `
+        let contentRepeat = `
+        <span class="result_points">
+          ${answers} туура жооптун ичинен ${questionsCount}
+        </span>
+        <span class="results_footer">
+          Жыйынтыгыңыз абдан начар эмес, бирок теманы дагы бир жолу окуп коюшуңузду сунуштайбыз  
+        </span>
+        <button class="btn_restart test_btn test_btn--fill">
+          Кайра өтүү
+        </button>
+      `
+        let contentRepeat2 = `
+        <span class="result_points">
+          ${answers} туура жооптун ичинен ${questionsCount}
+        </span>
+        <span class="results_footer">
+          Теманы кайталап, тестти кайрадан тапшырып көрүңүз
+        </span>
+        <button class="btn_restart test_btn test_btn--fill">
+          Кайра өтүү
+        </button>
+      `
 
-        let question6 = `
-    <div>     
-    <p class="question_text">Rulda oʻzingizni ishonchli his qilasizmi va ehtiyotkor haydash uslubini saqlaysizmi?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="script-77">ha</li>
-      <li class="test_item" data-id="2" data-value="script-77">yoʻq</li>
-    </ul>
-    </div>
-`
+        if(answers == 10) {
+            results.innerHTML = content2
+            btnDownload.style.display = 'grid'
+            localStorage.setItem('testPass', JSON.stringify(testCount))
+        }
 
-        let question7 = `
-    <div>     
-    <p class="question_text">Mashina haydashni asosiy daromad manbaiga aylantirishga tayyormisiz?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="script-8">ha</li>
-      <li class="test_item" data-id="2" data-value="script-8">yoʻq</li>
-    </ul>
-    </div>
-`
+        if(answers >= 7) {
+            results.innerHTML = content
+            btnDownload.style.display = 'grid'
+            localStorage.setItem('testPass', JSON.stringify(testCount))
+        }
 
-        let question8 = `
-    <div>     
-    <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="results">ha</li>
-      <li class="test_item" data-id="2" data-value="results">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        switch (index) {
-            case 2:
-                questions.innerHTML = question2
-                break
-            case 6:
-                questions.innerHTML = question6
-                break
-            case 7:
-                questions.innerHTML = question7
-                break
-            case 8:
-                questions.innerHTML = question8
-                break
-
-            default:
-                questions.innerHTML = content
+        if(answers < 7) {
+            if(localStorage.getItem('testFail1')) {
+                results.innerHTML = contentRepeat2
+            } else {
+                results.innerHTML = contentRepeat
+            }
         }
     }
 
-    const renderQuestionsVer2 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        questions.innerHTML = ``
-
-        let question7 = `
-    <div>     
-    <p class="question_text">Mashina haydashni asosiy daromad manbaiga aylantirishga tayyormisiz?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="script-8-7">ha</li>
-      <li class="test_item" data-id="2" data-value="script-8-7">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        let question8 = `
-    <div>     
-    <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="results2">ha</li>
-      <li class="test_item" data-id="2" data-value="results2">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        switch (index) {
-            case 7:
-                questions.innerHTML = question7
-                break
-            case 8:
-                questions.innerHTML = question8
-                break
+    const QuizRepeat = () => {
+        if(answersCount < 7) {
+            localStorage.setItem('testFail1', true)
         }
-    }
-
-    const renderQuestionsVer3 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        questions.innerHTML = ``
-
-        let question6 = `
-  <div>     
-  <p class="question_text">Rulda oʻzingizni ishonchli his qilasizmi va ehtiyotkor haydash uslubini saqlaysizmi?</p>
-  <ul class="test_list">
-    <li class="test_item" data-id="2" data-value="script-7-1">ha</li>
-    <li class="test_item" data-id="2" data-value="script-7-1">yoʻq</li>
-  </ul>
-  </div>
-`
-
-        let question7 = `
-    <div>     
-    <p class="question_text">Mashina haydashni asosiy daromad manbaiga aylantirishga tayyormisiz?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="script-8-1">ha</li>
-      <li class="test_item" data-id="2" data-value="script-8-1">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        let question8 = `
-    <div>     
-    <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="results3">ha</li>
-      <li class="test_item" data-id="2" data-value="results3">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        switch (index) {
-            case 6:
-                questions.innerHTML = question6
-                break
-            case 7:
-                questions.innerHTML = question7
-                break
-            case 8:
-                questions.innerHTML = question8
-                break
-        }
-    }
-
-    const renderQuestionsVer4 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        questions.innerHTML = ``
-
-        let question7 = `
-    <div>     
-    <p class="question_text">Mashina haydashni asosiy daromad manbaiga aylantirishga tayyormisiz?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="script-ver4">ha</li>
-      <li class="test_item" data-id="2" data-value="script-ver4">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        let question8 = `
-    <div>     
-    <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="results4">ha</li>
-      <li class="test_item" data-id="2" data-value="results4">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        switch (index) {
-            case 7:
-                questions.innerHTML = question7
-                break
-            case 8:
-                questions.innerHTML = question8
-                break
-        }
-    }
-
-    const renderQuestionsVer5 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        questions.innerHTML = ``
-
-        let question6 = `
-  <div>     
-  <p class="question_text">Rulda oʻzingizni ishonchli his qilasizmi va ehtiyotkor haydash uslubini saqlaysizmi?</p>
-  <ul class="test_list">
-    <li class="test_item" data-id="2" data-value="script-ver-5-6">ha</li>
-    <li class="test_item" data-id="2" data-value="script-ver-5-6">yoʻq</li>
-  </ul>
-  </div>
-`
-
-        let question7 = `
-    <div>     
-    <p class="question_text">Mashina haydashni asosiy daromad manbaiga aylantirishga tayyormisiz?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="script-ver-5-7">ha</li>
-      <li class="test_item" data-id="2" data-value="script-ver-5-7">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        let question8 = `
-    <div>     
-    <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="results4">ha</li>
-      <li class="test_item" data-id="2" data-value="results4">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        switch (index) {
-            case 6:
-                questions.innerHTML = question6
-                break
-            case 7:
-                questions.innerHTML = question7
-                break
-            case 8:
-                questions.innerHTML = question8
-                break
-        }
-    }
-
-    const renderQuestionsVer6 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        questions.innerHTML = ``
-
-        let question6 = `
-  <div>     
-  <p class="question_text">Rulda oʻzingizni ishonchli his qilasizmi va ehtiyotkor haydash uslubini saqlaysizmi?</p>
-  <ul class="test_list">
-    <li class="test_item" data-id="2" data-value="script-ver-5-6new">ha</li>
-    <li class="test_item" data-id="2" data-value="script-ver-5-6new">yoʻq</li>
-  </ul>
-  </div>
-`
-
-        let question7 = `
-    <div>     
-    <p class="question_text">Mashina haydashni asosiy daromad manbaiga aylantirishga tayyormisiz?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="script-ver-5-7new">ha</li>
-      <li class="test_item" data-id="2" data-value="script-ver-5-7new">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        let question8 = `
-    <div>     
-    <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-    <ul class="test_list">
-      <li class="test_item" data-id="2" data-value="results2">ha</li>
-      <li class="test_item" data-id="2" data-value="results2">yoʻq</li>
-    </ul>
-    </div>
-`
-
-        switch (index) {
-            case 6:
-                questions.innerHTML = question6
-                break
-            case 7:
-                questions.innerHTML = question7
-                break
-            case 8:
-                questions.innerHTML = question8
-                break
-        }
-    }
-
-    const script1 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Sizda Rossiyada berilgan haydovchilik guvohnomasi bormi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-6">ha</li>
-        <li class="test_item" data-id="2" data-value="script-1-1">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const renderQuestion8 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="results-5">ha</li>
-        <li class="test_item" data-id="2" data-value="results-5">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const renderQuestion8No = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="renderResults8Taxi1">ha</li>
-        <li class="test_item" data-id="2" data-value="renderResults8Taxi2">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const renderQuestion8Yes = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Begona odamlar bilan tez til topishib ketasizmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="renderResults8Taxi3">ha</li>
-        <li class="test_item" data-id="2" data-value="renderResults8Taxi2">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const renderQuestion7 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Mashina haydashni asosiy daromad manbaiga aylantirishga tayyormisiz?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-7-yes">ha</li>
-        <li class="test_item" data-id="2" data-value="script-7-no">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script3 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Sizda Rossiyada berilgan 
-haydovchilik guvohnomasi bormi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-3-2">ha</li>
-        <li class="test_item" data-id="2" data-value="script-3-1">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script6 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Sizda Rossiyada berilgan haydovchilik guvohnomasi bormi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-3-2">ha</li>
-        <li class="test_item" data-id="2" data-value="script-3-1">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script1Question3 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Sizda quyida koʻrsatilgan mamlakatlardan birining haydovchilik guvohnomasi bormi (Abxaziya, Belarus, Janubiy Osetiya, Qozogʻiston, Qirgʻiziston)</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-1-4">ha</li>
-        <li class="test_item" data-id="2" data-value="script-8-final">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script1Question4 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Siz haydovchilik guvohnomangiz berilgan mamlakat fuqarosi hisoblanasizmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-1-final">ha</li>
-        <li class="test_item" data-id="2" data-value="script-8-final">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script3Question3 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Sizda quyida koʻrsatilgan mamlakatlardan birining haydovchilik guvohnomasi bormi (Abxaziya, Belarus, Janubiy Osetiya, Qozogʻiston, Qirgʻiziston)</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-3-4">ha</li>
-        <li class="test_item" data-id="2" data-value="script-7">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script3Question4 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Siz haydovchilik guvohnomangiz berilgan mamlakat 
-fuqarosi hisoblanasizmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-ver5">ha</li>
-        <li class="test_item" data-id="2" data-value="script-7-8">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script3Question5 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Haydovchilik stajingiz 
-3 yildan ortiqmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-3-6">ha</li>
-        <li class="test_item" data-id="2" data-value="script-ver4">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script4Question5 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Haydovchilik stajingiz 
-3 yildan ortiqmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-3-6">ha</li>
-        <li class="test_item" data-id="2" data-value="script-6-8new">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const script3Question6 = (index) => {
-        // renderIndicator(index)
-        renderProgress(index)
-
-        images.forEach((el) => el.classList.add('hide'))
-
-        const img = document.querySelector(`#img-${index}`)
-        img.classList.remove('hide');
-
-        let question = `
-  <div>     
-      <p class="question_text">Rulda oʻzingizni ishonchli his qilasizmi va ehtiyotkor haydash uslubini saqlaysizmi?</p>
-      <ul class="test_list">
-        <li class="test_item" data-id="2" data-value="script-ver-7">ha</li>
-        <li class="test_item" data-id="2" data-value="script-ver4-7">yoʻq</li>
-      </ul>
-  </div>
-`
-
-        questions.innerHTML = question
-    }
-
-    const renderResultsScript1 = () => {
-        resultsBlock.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-        // testProgress.classList.add('hide')
-        formBtn.classList.remove('hide')
-
-        results.innerHTML = `
-    <div class="">
-        <p class="results_title">Rahmat!</p>
-        <p class="results_text">Endi siz oʻzingizni avtomobilda, piyoda yoki velosipeddagi kuryer sifatida sinab koʻrishingiz mumkin. Haydovchilik mahoratingizni oshiring va haydovchilik stajingiz 3 yildan oshganda, taksi haydovchisi boʻlishingiz mumkin. 
-    </p>
-  `
-    }
-
-    const renderResults8 = () => {
-        results.innerHTML = `
-    <div>
-        <p class="results_title">Rahmat!</p>
-        <p class="results_text">Oʻzingizni piyoda kuryer yoki velosipeddagi kuryer sifatida sinab koʻrishingiz mumkin!</p> 
-    </div>
-  `
-
-        resultsBlock.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-        // testProgress.classList.add('hide')
-        formBtn.classList.remove('hide')
-    }
-
-    const renderResults8Taxi1 = () => {
-        formBtn.classList.remove('hide')
-
-        results.innerHTML = `
-    <div>
-        <p class="results_title">Rahmat!</p>
-        <p class="results_text">Sizga taksi haydovchisi boʻlish keladi!
-    Yandex turli xil hamkorlik formatlarini taklif etadi: siz kuniga bir necha soat taksida ishlashingiz mumkin</p>
-    </p>
-  `
-
-        resultsBlock.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-        // testProgress.classList.add('hide')
-    }
-
-    const renderResults8Taxi2 = () => {
-        formBtn.classList.remove('hide')
-//  testProgress.classList.add('hide')
-
-        results.innerHTML = `
-    <div>
-        <p class="results_title">Rahmat!</p>
-        <p class="results_text">Taksi haydovchisi sifatida 
-    Yandex bilan hamkorlik qilish sizga mos keladi. Muloqot mahoratingizni oshiring. Odamlar bilan muloqot – haydovchi uchun muhim mahoratdir.</p>
-    </p>
-  `
-
-        resultsBlock.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-    }
-
-    const renderResults8Taxi3 = () => {
-        formBtn.classList.remove('hide')
-        // testProgress.classList.add('hide')
-
-        results.innerHTML = `
-    <div>
-        <p class="results_title">Rahmat!</p>
-        <p class="results_text">Tabriklaymiz! Taksi haydovchisi boʻlish uchun juda mossiz.
-    Tez va qulay boshlash mumkin. Yandex Pro bilan</p>
-    </p>
-  `
-
-        resultsBlock.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-    }
-
-    const renderResults18 = () => {
-        results.innerHTML = `
-    <div>
-        <p class="results_title">Rahmat!</p>
-        <p class="results_text">Afsuski, biz 18 yoshdan yuqori boʻlgan odamlar bilan hamkorlik qilamiz. 18 yoshga toʻlishingiz bilan oʻzingizni piyoda kuryer yoki velosipeddagi kuryer sifatida sinab koʻrishingiz mumkin. Agar haydovchilik guvohnomasi olsangiz, avtokuryer boʻlishingiz mumkin. Haydovchilik mahoratingizni oshirib, yetarli tajribaga ega boʻlsangiz, taksi haydovchisi boʻlishingiz mumkin.</p>
-    </p>
-  `
-
-        resultsBlock.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-        // testProgress.classList.add('hide')
-        formBtn.classList.remove('hide')
-    }
-
-    const renderResults2 = (index) => {
-        resultsBlock.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-        // testProgress.classList.add('hide')
-        formBtn.classList.remove('hide')
-
-        let results1 = `
-    <div>
-        <p class="results_title">Rahmat!</p>
-        <p class="results_text">Yandex bilan piyoda kuryer yoki velosipeddagi kuryer sifatida hamkorlik qilish sizga mos keladi. Siz rus tilida haydovchilik guvohnomasini olishingiz va taksi haydovchisi boʻlishingiz mumkin.</p> 
-    </p>
-  `
-
-        let results2 = `
-  <div>
-    <p class="results_title">Rahmat!</p>
-    <p class="results_text">Oʻzingizni piyoda kuryer yoki velosipeddagi kuryer sifatida sinab koʻrishingiz mumkin. Haydovchilik mahoratingizni oshiring va taksi haydovchisi boʻlishingiz mumkin.</p>
-  </p>
-`
-
-        let results4 = `
-<div>
-    <p class="results_title">Rahmat!</p>
-    <p class="results_text">Oʻzingizni piyoda kuryer yoki velosipeddagi kuryer sifatida sinab koʻrishingiz mumkin. Haydovchilik mahoratingizni oshiring va taksi haydovchisi boʻlishingiz mumkin.</p>
-</p>
-`
-
-        switch (index) {
-            case 1:
-                results.innerHTML = results1
-                break
-            case 2:
-                results.innerHTML = results2
-                break
-            case 4:
-                results.innerHTML = results4
-                break
-        }
-    }
-
-    const renderResults3 = () => {
-        results.classList.remove('hide')
-        questions.classList.add('hide')
-        btnSubmit.classList.add('hide')
-        // testProgress.classList.add('hide')
-        formBtn.classList.remove('hide')
-
-        results.innerHTML = `
-    <p>
-    Yandex bilan piyoda kuryer yoki velosipeddagi kuryer sifatida hamkorlik qilish sizga mos keladi. Siz rus tilida haydovchilik guvohnomasini olishingiz va taksi haydovchisi boʻlishingiz mumkin. 
-    </p>
-  `
+        resultsBlock.classList.add('hide')
+        questions.classList.remove('hide')
+        btnSubmit.classList.remove('hide')
+        title.classList.remove('hide')
+        btnsControl.style.display = 'none'
+        btnDownload.style.display = 'none'
+        currentIndex = 0
+        answersCount = 0
+        renderQuestions(0)
+        renderProgress(currentIndex)
     }
 
     test.addEventListener('click', (event) => {
         const target = event.target
 
-        if (target.classList.contains('test_item')) {
+
+        if(target.classList.contains('test_item')) {
             const item = document.querySelectorAll('.test_item')
 
             item.forEach((el) => {
@@ -837,141 +374,43 @@ fuqarosi hisoblanasizmi?</p>
             })
 
             target.classList.add('test_item--selected')
+
+            currentItem.value = Number(target.value)
+
+            isSelected = true
+
+            if(isSelected) {
+                btnSubmit.disabled = false
+            } else {
+                btnSubmit.disabled = true
+            }
+
+            return currentItem && isSelected
+        }
+
+        if(target.classList.contains('btn_restart')) {
+            QuizRepeat()
         }
     })
+
 
     btnSubmit?.addEventListener('click', () => {
-        const item = document.querySelector('.test_item--selected')
+        const item = document.querySelector(`#test_item-${currentItem.value}`)
 
-        switch (item.dataset.value) {
-            case 'script18':
-                renderResults18()
-                break
-            case 'script-1':
-                script1(2)
-                break
-            case 'script-1-final':
-                renderQuestions(6)
-                break
-            case 'script-1-1':
-                script1Question3(3)
-                break
-            case 'script-1-4':
-                script1Question4(4)
-                break
-            case 'script-2':
-                renderQuestions(2)
-                break
-            case 'script-3':
-                script3(3)
-                break
-            case 'script-ver4':
-                renderQuestionsVer5(6)
-                break
-            case 'script-3-1':
-                script3Question3(3)
-                break
-            case 'script-3-2':
-                script3Question5(5)
-                break
-            case 'script-3-4':
-                script3Question4(4)
-                break
-            case 'script-3-6':
-                script3Question6(6)
-                break
-            case 'script-4':
-                script1Question4(4)
-                break
-            case 'script-ver5':
-                script4Question5(5)
-                break
-            case 'script-6':
-                renderQuestions(6)
-                break
-            case 'script-6-1':
-                renderQuestionsVer3(6)
-                break
-            case 'script-ver-5-6':
-                renderQuestionsVer5(7)
-                break
-            case 'script-ver-5-6new':
-                renderQuestionsVer6(7)
-                break
-            case 'script-6-8':
-                renderQuestionsVer5(6)
-                break
-            case 'script-6-8new':
-                renderQuestionsVer6(6)
-                break
-            case 'script-ver-5-7':
-                renderQuestionsVer5(8)
-                break
-            case 'script-ver-5-7new':
-                renderQuestionsVer6(8)
-                break
-            case 'script-ver-7':
-                renderQuestion7(7)
-                break
-            case 'script-77':
-                renderQuestions(7)
-                break
-            case 'script-7':
-                renderQuestion8(8)
-                break
-            case 'script-7-1':
-                renderQuestionsVer3(7)
-                break
-            case 'script-8-1':
-                renderQuestionsVer3(8)
-                break
-            case 'script-8':
-                renderQuestions(8)
-                break
-            case 'script-7-8':
-                renderQuestionsVer2(7)
-                break
-            case 'script-8-7':
-                renderQuestionsVer2(8)
-                break
-            case 'script-7-yes':
-                renderQuestion8Yes(8)
-                break
-            case 'script-7-no':
-                renderQuestion8No(8)
-                break
-            case 'script-8-final':
-                renderQuestion8(8)
-                break
-            case 'script-ver4-7':
-                renderQuestionsVer5(7)
-                break
-            case 'results':
-                renderResultsScript1()
-                break
-            case 'results2':
-                renderResults2(1)
-                break
-            case 'results3':
-                renderResults2(2)
-                break
-            case 'results4':
-                renderResults2(4)
-                break
-            case 'results-5':
-                renderResults8()
-                break
-            case 'renderResults8Taxi1':
-                renderResults8Taxi1()
-                break
-            case 'renderResults8Taxi2':
-                renderResults8Taxi2()
-                break
-            case 'renderResults8Taxi3':
-                renderResults8Taxi3()
-                break
+        showResults(currentIndex, currentItem.value - 1, item)
+    })
+
+    btnNext?.addEventListener('click', () => {
+
+        if(DATA.length === currentIndex + 1) {
+            renderResults(answersCount, DATA.length)
+        } else {
+            renderQuestions(currentIndex + 1)
+            btnNext.classList.add('hide')
+            btnSubmit.classList.remove('hide')
         }
     })
 
-    renderQuestions(1)
+    renderQuestions(0)
+
 });
