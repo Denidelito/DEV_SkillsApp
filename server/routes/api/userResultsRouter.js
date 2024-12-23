@@ -28,6 +28,7 @@ router.get('/userResults/all', (req, res) => {
 // Получение результатов по user_id
 router.get('/userResults/user/:userId', (req, res) => {
     const userId = req.params.userId;
+
     UserResultsController.getUserResultsByUserId(userId, (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });

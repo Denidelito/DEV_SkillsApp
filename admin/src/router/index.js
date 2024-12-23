@@ -6,6 +6,7 @@ import Users from "../views/Users.vue";
 import Directions from "../views/Directions.vue";
 import TaskGroups from "../views/TaskGroups.vue";
 import TaskGroup from "../views/Tasks.vue";
+import UserResults from "../views/UserResults.vue";
 
 
 const requireAuth = (to, from, next) => {
@@ -45,6 +46,12 @@ const routes = [
             {
                 path: 'directions/:directionId/groups/:taskGroupId',
                 component: TaskGroup,
+                beforeEnter: requireAuth,
+                props: true,
+            },
+            {
+                path: 'users/:userId/results',
+                component: UserResults,
                 beforeEnter: requireAuth,
                 props: true,
             },

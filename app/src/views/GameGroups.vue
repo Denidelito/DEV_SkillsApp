@@ -28,7 +28,7 @@ onMounted(() => {
     <hr>
     <div class="gameGroup-tabs">
       <div class="gameGroup-tab" v-for="group in groupStore.groups" :key="group.id">
-        <router-link class="gameGroup-link" :to="`/directions/${directionId}/groups/${group.id}`">
+        <router-link class="gameGroup-link" :to="`/app/directions/${directionId}/groups/${group.id}`">
           <span class="gameGroup-link__text">{{ group.name }}</span>
           <span class="gameGroup-link__icon">
             <svg-icon name="play"/>

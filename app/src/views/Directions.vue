@@ -33,19 +33,19 @@ onMounted(() => {
           <span class="direction-link__text">{{ direction.name }}</span>
         </router-link>
       </div>-->
-      <router-link class="direction-link direction-link_green" to="/directions/6/groups">
+      <router-link class="direction-link direction-link_green" to="/app/directions/6/groups">
         <span class="direction-link__icon">
             <svg-icon width="30" height="30" name="food"/>
         </span>
         <span class="direction-link__text">Ресторанный контент</span>
       </router-link>
-      <router-link class="direction-link" to="/directions/5/groups">
+      <router-link class="direction-link" to="/app/directions/5/groups">
         <span class="direction-link__icon">
             <svg-icon width="30" height="30" name="store"/>
         </span>
         <span class="direction-link__text">Ритейл</span>
       </router-link>
-      <router-link class="direction-link direction-link_orange" to="/directions/7/groups">
+      <router-link class="direction-link direction-link_orange" to="/app/directions/7/groups">
         <span class="direction-link__icon">
             <svg-icon width="30" height="30" name="camera"/>
         </span>

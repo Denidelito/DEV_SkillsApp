@@ -70,7 +70,7 @@ const clearMessages = () => {
     <tbody>
     <tr v-for="user in usersStore.users" :key="user.id">
       <td>{{ user.id }}</td>
-      <td>{{ user.username }}</td>
+      <td><router-link :to="`/admin/users/${user.id}/results`">{{ user.username }}</router-link></td>
       <td>{{ user.role }}</td>
       <td>
         <button @click="openModal(user.id)" class="button button--small button--danger">Удалить</button>
@@ -92,4 +92,3 @@ const clearMessages = () => {
     </div>
   </div>
 </template>
-

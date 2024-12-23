@@ -1,6 +1,6 @@
 <script setup>
-import {ref, onMounted, onUnmounted, reactive, computed} from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
+import {useRoute, useRouter} from 'vue-router';
 import { useTasksStore } from '../stores/tasks';
 import { useUserResultsStore } from '../stores/userResultStore';
 import SvgIcon from "../components/SvgIcon.vue";
@@ -8,18 +8,114 @@ import SvgIcon from "../components/SvgIcon.vue";
 const tasksStore = useTasksStore();
 const userResultsStore = useUserResultsStore();
 const route = useRoute();
+const router = useRouter();
 const taskGroupId = ref(route.params.taskGroupId);
 
 // Состояние игры
 const state = reactive({
   currentTaskIndex: 0,
   health: 3,
-  timer: {
-    play: false,
-    value: 15
-  },
+  timer: 15,
   score: 0,
   interval: null,
+  feedback: false,
+  isChecked: false
+});
+
+// Запуск таймера
+const startTimer = () => {
+  clearInterval(state.interval);
+  state.timer = 15;
+  state.interval = setInterval(() => {
+    if (state.timer > 0 && !state.feedback) {
+      state.timer--;
+    } else {
+      handleWrongAnswer();
+      clearInterval(state.interval);
+    }
+  }, 1000);
+};
+
+// Завершение игры
+const finishGame = () => {
+  clearInterval(state.interval);
+
+  // Отправка результата (если необходимо)
+  sendResult();
+
+  // Редирект на экран GameOver с передачей результата
+  router.push({
+    name: 'GameOver',
+    query: { score: state.score, taskGroupId: taskGroupId.value }
+  });
+};
+
+
+// Обработка неверного ответа или истечения времени
+const handleWrongAnswer = () => {
+  state.health--;
+  state.feedback = true;
+  clearInterval(state.interval);
+  if (state.health <= 0) {
+    finishGame();
+  }
+};
+
+// Обработка правильного ответа
+const handleCorrectAnswer = () => {
+  state.score++;
+  state.feedback = true;
+  clearInterval(state.interval);
+};
+
+const checkCorrectPickImages = (correct, itemAnswer) => {
+  if (correct === itemAnswer) {
+    handleCorrectAnswer();
+  } else {
+    handleWrongAnswer();
+  }
+};
+
+const checkCorrectAnswer = (itemAnswer) => {
+  state.isChecked = true;
+
+  if (itemAnswer.isCorrect) {
+    setTimeout(() => handleCorrectAnswer(), 1000);
+  } else {
+    setTimeout(() => handleWrongAnswer(), 1000);
+  }
+};
+
+// Переход к следующему заданию
+const nextTask = () => {
+  state.isChecked = false;
+
+  if (state.currentTaskIndex < tasksStore.tasks.length - 1) {
+    state.currentTaskIndex++;
+    state.feedback = false;
+    startTimer();
+  } else {
+    finishGame();
+  }
+};
+
+const sendResult = async () => {
+  try {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user || !user.userId) {
+      throw new Error('Пользователь не найден');
+    }
+
+    const userId = user.userId;
+    await userResultsStore.addUserResult(userId, taskGroupId.value, state.score);
+  } catch (error) {
+    alert('Не удалось отправить результат. Попробуйте позже.');
+  }
+};
+
+const taskData = computed(() => {
+  const task = tasksStore.tasks[state.currentTaskIndex];
+  return task ? task.task_data : {};
 });
 
 onMounted(() => {
@@ -33,74 +129,13 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(state.interval);
 });
-
-// Запуск таймера
-const startTimer = () => {
-  clearInterval(state.interval);
-  state.timer = 15;
-  state.interval = setInterval(() =>    {
-    if (state.timer > 0) {
-      state.timer--;
-    } else {
-      handleWrongAnswer();
-    }
-  }, 1000);
-};
-
-const taskData = computed(() => tasksStore.tasks[state.currentTaskIndex].task_data);
-
-// Обработка неверного ответа или истечения времени
-const handleWrongAnswer = () => {
-  state.health--;
-  if (state.health <= 0) {
-    // finishGame();
-  } else {
-    nextTask();
-  }
-};
-
-// Обработка правильного ответа
-const handleCorrectAnswer = () => {
-  state.score++;
-  nextTask();
-};
-
-const checkCorrectPickImages = (correct, itemAnswer) => {
-  if (correct === itemAnswer) {
-    handleCorrectAnswer();
-  } else {
-    handleWrongAnswer();
-  }
-}
-
-// Переход к следующему заданию
-const nextTask = () => {
-  if (state.currentTaskIndex < tasksStore.tasks.length - 1) {
-    state.currentTaskIndex++;
-    startTimer();
-  } else {
-    // finishGame();
-  }
-};
-
-const sendResult = async () => {
-  try {
-    const userId = JSON.parse(localStorage.getItem('user')).userId;
-    const score = 100;
-    await userResultsStore.addUserResult(userId, taskGroupId.value, score);
-    alert('Результат отправлен успешно!');
-  } catch (error) {
-    console.error('Failed to send result:', error);
-  }
-};
 </script>
-
 
 <template>
   <div class="game" v-if="tasksStore.tasks.length">
     <div class="game__header">
       <div class="game__timer">
-        <svg-icon name="timer" width="28" height="28"/>
+        <svg-icon name="timer" width="28" height="28" />
         {{ state.timer }}
       </div>
       <div class="game__health">
@@ -108,38 +143,79 @@ const sendResult = async () => {
             v-for="i in 3"
             :key="i"
             :name="i <= state.health ? 'health-fill' : 'health'"
-            width="28" height="28"
+            width="28"
+            height="28"
         />
       </div>
     </div>
     <div class="game__item">
-      <div class="game__item-card">
-        <div class="game__counter">Задание <strong>{{state.currentTaskIndex + 1}}</strong> / {{tasksStore.tasks.length}}</div>
-        <div class="game__question" v-if="tasksStore.tasks[state.currentTaskIndex].task_data.type === 'question-one'">
-          {{ tasksStore.tasks[state.currentTaskIndex].task_data.text }}
+      <div v-if="!state.feedback" class="game__item-card">
+        <div class="game__counter">
+          Задание <strong>{{ state.currentTaskIndex + 1 }}</strong> / {{ tasksStore.tasks.length }}
+        </div>
+        <div
+            class="game__question"
+            v-if="taskData.type === 'question-one'"
+        >
+          {{ taskData.text }}
         </div>
         <img
-            v-if="tasksStore.tasks[state.currentTaskIndex].task_data.type === 'pick-images'"
-            :src="tasksStore.tasks[state.currentTaskIndex].task_data.imageUrl"
+            v-if="taskData.type === 'pick-images'"
+            :src="taskData.imageUrl"
             width="100%"
             alt="Task image"
             class="task-image"
         />
       </div>
-      <div v-if="taskData.type === 'pick-images'" class="game__likes">
-        <button class="game__like-button" @click="checkCorrectPickImages('true', taskData.answer)">
-          <svg-icon name="like" width="50" height="50"/>
+      <div v-else class="game__item-card">
+        <div class="game__feedback">
+          <picture>
+            <img
+                width="108"
+                height="107"
+                src="../assets/images/character-feedback.png"
+                alt="Говорящая выдра"
+            />
+          </picture>
+          <div class="game__feedback-text">
+            {{ taskData.feedback || 'Продолжайте!' }}
+          </div>
+        </div>
+      </div>
+      <div
+          v-if="taskData.type === 'pick-images' && !state.feedback"
+          class="game__likes"
+      >
+        <button
+            class="game__like-button"
+            @click="checkCorrectPickImages('true', taskData.answer)"
+        >
+          <svg-icon name="like" width="50" height="50" />
         </button>
-        <button class="game__like-button game__like-button_dislike" @click="checkCorrectPickImages('false', taskData.answer)">
-          <svg-icon name="dislike" width="50" height="50"/>
+        <button
+            class="game__like-button game__like-button_dislike"
+            @click="checkCorrectPickImages('false', taskData.answer)"
+        >
+          <svg-icon name="dislike" width="50" height="50" />
         </button>
       </div>
-      <div class="game__answers" v-if="taskData.type === 'question-one'">
-        <button class="game__answer" v-for="(answer, index) in taskData.answers">
+      <div
+          v-if="taskData.type === 'question-one' && !state.feedback"
+          class="game__answers"
+      >
+        <button
+            class="game__answer"
+            v-for="(answer, index) in taskData.answers"
+            :key="index"
+            @click="checkCorrectAnswer(answer)"
+        >
           {{ answer.text }}
-          <svg-icon name="correct" width="24" height="24"/>
-          <svg-icon name="incorrect" width="24" height="24"/>
+          <svg-icon v-if="answer.isCorrect && state.isChecked" name="correct" width="24" height="24" />
+          <svg-icon v-if="!answer.isCorrect && state.isChecked" name="incorrect" width="24" height="24" />
         </button>
+      </div>
+      <div v-if="state.feedback">
+        <button class="button" @click="nextTask">Продолжить</button>
       </div>
     </div>
   </div>
@@ -149,6 +225,9 @@ const sendResult = async () => {
 </template>
 
 <style scoped lang="scss">
+.button {
+  width: 100%;
+}
 .game {
   display: flex;
   flex-direction: column;
@@ -247,8 +326,15 @@ const sendResult = async () => {
     gap: 20px;
   }
   &__answer {
+    min-height: 49px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;
     text-align: left;
     border: 2px solid #CFBEF6;
+    border-radius: 10px;
+    padding: 11px 19px 10px;
     background-color: white;
     color: #1E1E1E;
 
@@ -258,6 +344,17 @@ const sendResult = async () => {
 
     &_incorrect {
       border-color: #D90368;
+    }
+  }
+  &__feedback {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: center;
+
+    &-text {
+      font-family: var(--font-secondary), sans-serif;
+      font-size: 1.125rem;
     }
   }
 }

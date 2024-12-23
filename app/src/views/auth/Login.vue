@@ -8,7 +8,7 @@ const username = ref('');
 const handleLogin = async () => {
   const success = await authStore.login(username.value);
   if (success) {
-    window.location.href = '/';
+    window.location.href = '/app';
   }
 };
 </script>

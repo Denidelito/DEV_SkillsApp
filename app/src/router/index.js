@@ -5,30 +5,40 @@ import Directions from '../views/Directions.vue';
 import Login from '../views/auth/Login.vue';
 import TaskGroups from "../views/GameGroups.vue";
 import Game from "../views/Game.vue";
+import GameOver from "../views/GameOver.vue";
 
 const routes = [
     {
-        path: '/',
+        path: '/app',
         name: 'Directions',
         component: Directions,
         meta: { requiresAuth: true },
     },
     {
-        path: '/directions/:directionId/groups',
+        path: '/app/directions/:directionId/groups',
         component: TaskGroups,
         meta: { requiresAuth: true },
         props: true,
     },
     {
-        path: '/directions/:directionId/groups/:taskGroupId',
+        path: '/app/directions/:directionId/groups/:taskGroupId',
         component: Game,
         meta: { requiresAuth: true },
         props: true,
     },
     {
-        path: '/auth/login',
+        path: '/app/directions/:directionId/groups/:taskGroupId/game-over/',
+        name: 'GameOver',
+        component: () => import('../views/GameOver.vue')
+    },
+    {
+        path: '/app/auth/login',
         name: 'Login',
         component: Login,
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/app',
     },
 ];
 

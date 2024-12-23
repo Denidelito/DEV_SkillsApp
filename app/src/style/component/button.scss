@@ -1,4 +1,4 @@
-button {
+.button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -8,11 +8,17 @@ button {
   background-color: var(--color-primary);
   cursor: pointer;
   transition: border-color 0.25s;
+  text-decoration: none;
+  color: white;
+  text-align: center;
 }
-button:hover {
+.button:hover {
   border-color: #646cff;
+  background-color: rgba(100, 108, 255, 0.75);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.button:focus,
+.button:active,
+.button:target,
+.button:focus-visible {
+  background-color: rgba(100, 108, 255, 0.75);
 }

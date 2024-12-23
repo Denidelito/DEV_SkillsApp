@@ -25,7 +25,22 @@ class UserResults {
 
     // Получение результатов по user_id
     static getUserResultsByUserId(userId, callback) {
-        const query = 'SELECT * FROM user_results WHERE user_id = ?';
+        const query = `
+        SELECT 
+            ur.id, 
+            ur.user_id, 
+            ur.score, 
+            ur.completed_at, 
+            tg.name AS task_group_name
+        FROM 
+            user_results ur
+        JOIN 
+            task_groups tg 
+        ON 
+            ur.task_group_id = tg.id
+        WHERE 
+            ur.user_id = ?`;
+
         db.query(query, [userId], (err, results) => {
             if (err) {
                 return callback(err, null);
@@ -33,6 +48,7 @@ class UserResults {
             callback(null, results);
         });
     }
+
 
     // Удаление записи по id
     static deleteUserResultById(id, callback) {
