@@ -22,15 +22,17 @@ const routes = [
     },
     {
         path: '/app/directions/:directionId/groups/:taskGroupId',
+        name: 'Game',
         component: Game,
         meta: { requiresAuth: true },
         props: true,
-    },
-    {
+    },{
         path: '/app/directions/:directionId/groups/:taskGroupId/game-over/',
         name: 'GameOver',
-        component: () => import('../views/GameOver.vue')
+        component: GameOver,
+        meta: { requiresAuth: true },
     },
+
     {
         path: '/app/auth/login',
         name: 'Login',
@@ -43,7 +45,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/app'),
     routes,
 });
 

@@ -4,8 +4,7 @@ import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import {resolve} from "path";
 
 export default defineConfig({
-  root: resolve(__dirname, 'src'),
-  base: './',
+  root: 'src',
   build: {
     outDir: '../dist',
   },
@@ -17,7 +16,7 @@ export default defineConfig({
       }),
   ],
   server: {
-    port: 3002,
+    port: 3001,
     open: true,
     historyApiFallback: true,
   },

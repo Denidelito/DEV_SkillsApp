@@ -107,7 +107,8 @@ const goToHome = () => {
   }
 }
 nav {
-  height: calc(100vh - 320px);
+  min-height: calc(100vh - 440px);
+  padding: 60px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
