@@ -35,7 +35,5 @@ const store = useUserResultsStore();
 onMounted(async () => {
   await store.fetchUserResults(userId.value);
   userResults.value = store.userResults;
-
-  console.log(userResults.value)
 });
 </script>
