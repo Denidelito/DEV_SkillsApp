@@ -45,7 +45,6 @@ const setCorrectAnswer = (index) => {
 
 <template>
   <div>
-    <h3>Edit Task</h3>
 <!--    <div class="input">
       <label for="task-type">Выберите тип задачи:</label>
       <select id="task-type" v-model="editableTask.type">
@@ -75,22 +74,24 @@ const setCorrectAnswer = (index) => {
       </div>
       <div class="input">
         <label>Выберите правильный ответ:</label>
-        <label>
-          <input
-              type="radio"
-              value="true"
-              v-model="editableTask.task_data.answer"
-          />
-          Yes
-        </label>
-        <label>
-          <input
-              type="radio"
-              value="false"
-              v-model="editableTask.task_data.answer"
-          />
-          No
-        </label>
+        <div class="radio-group">
+          <label>
+            <input
+                type="radio"
+                value="true"
+                v-model="editableTask.task_data.answer"
+            />
+            Да
+          </label>
+          <label>
+            <input
+                type="radio"
+                value="false"
+                v-model="editableTask.task_data.answer"
+            />
+            Нет
+          </label>
+        </div>
       </div>
     </div>
 
@@ -119,21 +120,23 @@ const setCorrectAnswer = (index) => {
             v-model="answer.text"
             placeholder="Введите текст ответа"
         />
-        <label>
-          <input
-              type="radio"
-              name="correct-answer"
-              :checked="answer.isCorrect"
-              @change="setCorrectAnswer(index)"
-          />
-          Верный
-        </label>
+        <div class="radio-group">
+          <label>
+            <input
+                type="radio"
+                name="correct-answer"
+                :checked="answer.isCorrect"
+                @change="setCorrectAnswer(index)"
+            />
+            Верный
+          </label>
+        </div>
         <button @click="removeAnswer(index)">Удалить</button>
       </div>
-      <button @click="addAnswer">Добавить ответ</button>
+      <button class="button button--small button--info" @click="addAnswer">Добавить ответ</button>
     </div>
 
-    <button @click="saveTask">Save</button>
-    <button @click="cancelEdit">Cancel</button>
+    <button class="button" @click="saveTask">Применить</button>
+    <button class="button button--danger" @click="cancelEdit">Отменить</button>
   </div>
 </template>

@@ -69,8 +69,8 @@ const setCorrectAnswer = (index) => {
     <div class="input">
       <label for="task-type">Выберите тип задачи:</label>
       <select id="task-type" v-model="taskType">
-        <option value="pick-images">Pick Images</option>
-        <option value="question-one">Question One</option>
+        <option value="pick-images">Выбор изображения</option>
+        <option value="question-one">Тестовый выпрос</option>
       </select>
     </div>
 
@@ -82,7 +82,7 @@ const setCorrectAnswer = (index) => {
             type="text"
             id="image-url"
             v-model="newTaskData.imageUrl"
-            placeholder="Enter image URL"
+            placeholder="url"
         />
       </div>
       <!-- Общее поле обратной связи -->
@@ -91,18 +91,20 @@ const setCorrectAnswer = (index) => {
         <textarea
             id="feedback"
             v-model="newTaskData.feedback"
-            placeholder="Enter feedback for the task"
         ></textarea>
       </div>
       <div class="input">
-        <label>
-          <input type="radio" :value="true" v-model="newTaskData.answer"/>
-          Yes
-        </label>
-        <label>
-          <input type="radio" :value="false" v-model="newTaskData.answer"/>
-          No
-        </label>
+        <label>Проходит ли модерацию?</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" :value="true" v-model="newTaskData.answer"/>
+            Да
+          </label>
+          <label>
+            <input type="radio" :value="false" v-model="newTaskData.answer"/>
+            Нет
+          </label>
+        </div>
       </div>
     </div>
 
@@ -113,7 +115,6 @@ const setCorrectAnswer = (index) => {
         <textarea
             id="question-text"
             v-model="newTaskData.text"
-            placeholder="Enter question"
         ></textarea>
       </div>
       <!-- Общее поле обратной связи -->
@@ -122,30 +123,43 @@ const setCorrectAnswer = (index) => {
         <textarea
             id="feedback"
             v-model="newTaskData.feedback"
-            placeholder="Enter feedback for the task"
         ></textarea>
       </div>
       <div v-for="(answer, index) in newTaskData.answers" :key="index" class="input">
-        <label>Ответ {{ index + 1 }}</label>
-        <input
-            type="text"
-            v-model="answer.text"
-            placeholder="Enter answer text"
-        />
-        <label>
+        <div class="input">
+          <label>Ответ {{ index + 1 }}</label>
           <input
-              type="radio"
-              name="correct-answer"
-              :checked="answer.isCorrect"
-              @change="setCorrectAnswer(index)"
+              type="text"
+              v-model="answer.text"
           />
-          Верный
-        </label>
+        </div>
+        <div class="input">
+          <div class="radio-group">
+            <label>
+              <input
+                  type="radio"
+                  name="correct-answer"
+                  :checked="answer.isCorrect"
+                  @change="setCorrectAnswer(index)"
+              />
+              Верный
+            </label>
+          </div>
+
+        </div>
       </div>
-      <button @click="addAnswer">Добавить ответ</button>
+      <button class="button button--small button--info" @click="addAnswer">Добавить ответ</button>
     </div>
 
-
-    <button @click="addTask">Add Task</button>
+    <div class="form-nav">
+      <button class="button" @click="addTask">Добавить задание</button>
+      <slot></slot>
+    </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.form-nav {
+  padding-top: 10px;
+}
+</style>

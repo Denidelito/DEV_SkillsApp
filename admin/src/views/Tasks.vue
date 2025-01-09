@@ -87,8 +87,9 @@ onMounted(fetchTasks);
         <AddTaskForm
             :taskGroupId="taskGroupId"
             @task-added="showAddModal = false"
-        />
-        <button @click="showAddModal = false">Закрыть</button>
+        >
+        <button class="button button--danger" @click="showAddModal = false">Закрыть</button>
+        </AddTaskForm>
       </div>
     </div>
 
