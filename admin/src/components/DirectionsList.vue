@@ -44,7 +44,6 @@ const openDeleteModal = (directionId) => {
 };
 
 const openEditModal = (direction) => {
-  directionsStore.clearMessages();
   editDirection.id = direction.id;
   editDirection.name = direction.name;
   editDirection.description = direction.description;
