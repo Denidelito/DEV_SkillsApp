@@ -1,11 +1,10 @@
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref } from 'vue';
+import ActionConfirm from "./forms/ActionConfirm.vue";
 
 const props = defineProps({
   directionId: String,
   groups: Array,
-  errorMessage: String,
-  successMessage: String,
   onDeleteGroup: Function,
   onUpdateGroup: Function
 });
@@ -52,18 +51,6 @@ const handleUpdate = () => {
 
 <template>
   <div>
-    <div v-if="errorMessage" class="message message-error">
-      <div class="message-content">
-        {{ errorMessage }}
-      </div>
-    </div>
-
-    <div v-if="successMessage" class="message message-success">
-      <div class="message-content">
-        {{ successMessage }}
-      </div>
-    </div>
-
     <table v-if="groups.length > 0" class="table">
       <thead>
       <tr>
@@ -90,20 +77,12 @@ const handleUpdate = () => {
       <p>No groups found for this direction.</p>
     </div>
 
-    <div v-if="showModal" class="modal-overlay">
-      <div class="modal">
-        <h3>Подтвердите удаление</h3>
-        <p>Вы уверены, что хотите удалить эту группу?</p>
-        <div class="modal-actions">
-          <button @click="handleDelete" class="button button--danger">
-            Да, удалить
-          </button>
-          <button @click="closeModal" class="button button--secondary">
-            Отмена
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- Delete Modal -->
+    <ActionConfirm v-if="showModal"
+        title="Подтвердите удаление"
+        text="Вы уверены, что хотите удалить эту группу?"
+        :action-cancel="closeModal"
+        :action-accept="handleDelete"/>
 
     <div v-if="showEditModal" class="modal-overlay">
       <div class="modal">

@@ -1,37 +1,21 @@
 import { defineStore } from 'pinia';
 import axios from '../axios';
 import { useAuthStore } from './auth';
+import {useHandleLogStore} from "./handleLog.js";
 
 export const useDirectionsStore = defineStore('directions', {
     state: () => ({
         directions: [],
         authStore: useAuthStore(),
-        errorMessage: '',
-        successMessage: '',
+        handleLog: useHandleLogStore()
     }),
 
     actions: {
-        handleError(error) {
-            if (error.response) {
-                this.errorMessage = error.response.data.message || 'Request failed!';
-            } else if (error.request) {
-                this.errorMessage = 'No response from server. Please try again later.';
-            } else {
-                this.errorMessage = `Request error: ${error.message}`;
-            }
-        },
-
-        clearMessages() {
-            this.errorMessage = '';
-            this.successMessage = '';
-        },
-
         getAuthToken() {
             return `Bearer ${this.authStore.token}`;
         },
 
         async fetchDirections() {
-            this.clearMessages();
             try {
                 const response = await axios.get('/api/directions', {
                     headers: {
@@ -44,13 +28,12 @@ export const useDirectionsStore = defineStore('directions', {
                     this.authStore.logout();
                     throw new Error('Session expired. Please log in again.');
                 } else {
-                    this.handleError(error);
+                    this.handleLog.handleError(error);
                 }
             }
         },
 
         async addDirection(name, description) {
-            this.clearMessages();
             try {
                 const response = await axios.post(
                     '/api/directions',
@@ -68,16 +51,15 @@ export const useDirectionsStore = defineStore('directions', {
                     description,
                 });
 
-                this.successMessage = 'Direction added successfully!';
+                this.handleLog.setSuccessMessage('Direction added successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },
 
         async updateDirection(directionId, name, description) {
-            this.clearMessages();
             try {
                 const response = await axios.put(
                     `/api/directions/${directionId}`,
@@ -94,16 +76,15 @@ export const useDirectionsStore = defineStore('directions', {
                     this.directions[index] = { ...this.directions[index], name, description };
                 }
 
-                this.successMessage = 'Direction updated successfully!';
+                this.handleLog.setSuccessMessage('Direction updated successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },
 
         async deleteDirection(directionId) {
-            this.clearMessages();
             try {
                 const response = await axios.delete(`/api/directions/${directionId}`, {
                     headers: {
@@ -115,10 +96,10 @@ export const useDirectionsStore = defineStore('directions', {
                     direction => direction.id !== directionId
                 );
 
-                this.successMessage = 'Direction deleted successfully!';
+                this.handleLog.setSuccessMessage('Direction deleted successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },

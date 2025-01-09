@@ -12,8 +12,6 @@ const isModalOpen = ref(false);
 
 const passwordFieldRequired = computed(() => role.value !== 'user');
 
-const errorMessage = computed(() => userStore.errorMessage);
-const successMessage = computed(() => userStore.successMessage);
 
 const openModal = () => {
   isModalOpen.value = true;
@@ -22,7 +20,6 @@ const openModal = () => {
 const closeModal = () => {
   isModalOpen.value = false;
   resetForm();
-  userStore.clearMessages();
 };
 
 const resetForm = () => {
@@ -69,8 +66,6 @@ const addUser = async () => {
             <option value="user">User</option>
           </select>
         </div>
-        <div v-if="errorMessage" class="message-error">{{ errorMessage }}</div>
-        <div v-if="successMessage" class="message-success">{{ successMessage }}</div>
         <button class="button" type="submit">Добавить</button>
         <button class="button button--secondary" type="button" @click="closeModal">Отмена</button>
       </form>

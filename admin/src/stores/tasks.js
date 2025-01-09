@@ -1,37 +1,21 @@
 import { defineStore } from 'pinia';
 import axios from '../axios';
 import { useAuthStore } from './auth';
+import { useHandleLogStore } from "./handleLog.js";
 
 export const useTasksStore = defineStore('tasks', {
     state: () => ({
         tasks: [],
         authStore: useAuthStore(),
-        errorMessage: '',
-        successMessage: '',
+        handleLog: useHandleLogStore()
     }),
 
     actions: {
-        handleError(error) {
-            if (error.response) {
-                this.errorMessage = error.response.data.message || 'Something went wrong!';
-            } else if (error.request) {
-                this.errorMessage = 'No response from server. Please try again later.';
-            } else {
-                this.errorMessage = `Request error: ${error.message}`;
-            }
-        },
-
-        clearMessages() {
-            this.errorMessage = '';
-            this.successMessage = '';
-        },
-
         getAuthToken() {
             return `Bearer ${this.authStore.token}`;
         },
 
         async fetchTasksByGroup(groupId) {
-            this.clearMessages();
             try {
                 const response = await axios.get(`/api/tasks/group/${groupId}`, {
                     headers: {
@@ -46,7 +30,6 @@ export const useTasksStore = defineStore('tasks', {
                             task_data: JSON.parse(item.task_data),
                         };
                     } catch (parseError) {
-                        console.error('Failed to parse task_data:', item.task_data, parseError);
                         return item;
                     }
                 });
@@ -57,14 +40,12 @@ export const useTasksStore = defineStore('tasks', {
                     this.authStore.logout();
                     throw new Error('Session expired. Please log in again.');
                 } else {
-                    console.error('Error fetching tasks:', error);
-                    this.handleError(error);
+                    this.handleLog.handleError(error);
                 }
             }
         },
 
         async addTask(taskGroupId, taskData, adminId) {
-            this.clearMessages();
             try {
                 const serializedData = taskData
                     ? JSON.stringify(taskData)
@@ -87,16 +68,15 @@ export const useTasksStore = defineStore('tasks', {
                     admin_id: adminId,
                 });
 
-                this.successMessage = 'Task added successfully!';
+                this.handleLog.setSuccessMessage('Task added successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },
 
         async deleteTask(taskId) {
-            this.clearMessages();
             try {
                 await axios.delete(`/api/tasks/${taskId}`, {
                     headers: {
@@ -106,14 +86,13 @@ export const useTasksStore = defineStore('tasks', {
 
                 this.tasks = this.tasks.filter((task) => task.id !== taskId);
 
-                this.successMessage = 'Task deleted successfully!';
+                this.handleLog.setSuccessMessage('Task deleted successfully!');
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
             }
         },
 
         async updateTask(taskId, updatedTaskData) {
-            this.clearMessages();
             try {
                 const serializedData = updatedTaskData.task_data
                     ? JSON.stringify(updatedTaskData.task_data)
@@ -138,11 +117,10 @@ export const useTasksStore = defineStore('tasks', {
                     ];
                 }
 
-                this.successMessage = 'Task updated successfully!';
+                this.handleLog.setSuccessMessage('Task updated successfully!');
                 return response.data;
             } catch (error) {
-                console.error('Error updating task:', error);
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         }

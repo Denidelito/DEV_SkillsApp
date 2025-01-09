@@ -1,12 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useUsersStore } from '../stores/user';
+import ActionConfirm from "./forms/ActionConfirm.vue";
 
 const usersStore = useUsersStore();
 const showModal = ref(false);
 const userIdToDelete = ref(null);
-const errorMessage = ref('');
-const successMessage = ref('');
 
 onMounted(async () => {
   try {
@@ -18,14 +17,9 @@ onMounted(async () => {
 
 const handleDelete = async () => {
   if (userIdToDelete.value !== null) {
-    try {
-      await usersStore.deleteUser(userIdToDelete.value);
-      successMessage.value = 'User deleted successfully!';
-      usersStore.users = usersStore.users.filter(user => user.id !== userIdToDelete.value);
-      closeModal();
-    } catch (error) {
-      errorMessage.value = error.message;
-    }
+    await usersStore.deleteUser(userIdToDelete.value);
+    usersStore.users = usersStore.users.filter(user => user.id !== userIdToDelete.value);
+    closeModal();
   }
 };
 
@@ -38,26 +32,9 @@ const closeModal = () => {
   showModal.value = false;
   userIdToDelete.value = null;
 };
-
-const clearMessages = () => {
-  errorMessage.value = '';
-  successMessage.value = '';
-};
 </script>
 
 <template>
-  <div v-if="errorMessage" class="message message-error">
-    <div class="message-content">
-      {{ errorMessage }}
-    </div>
-  </div>
-
-  <div v-if="successMessage" class="message message-success">
-    <div class="message-content">
-      {{ successMessage }}
-    </div>
-  </div>
-
   <table class="table" v-if="usersStore.users.length">
     <thead>
     <tr>
@@ -79,16 +56,9 @@ const clearMessages = () => {
     </tbody>
   </table>
 
-  <p v-else-if="!errorMessage">No users available.</p>
-
-  <div v-if="showModal" class="modal-overlay">
-    <div class="modal">
-      <h3>Подтвердите удаление</h3>
-      <p>Вы уверены, что хотите удалить этого пользователя?</p>
-      <div class="modal-actions">
-        <button @click="handleDelete" class="button button--danger">Да, удалить</button>
-        <button @click="closeModal" class="button button--secondary">Отмена</button>
-      </div>
-    </div>
-  </div>
+  <ActionConfirm v-if="showModal"
+      title="Подтвердите удаление"
+      text="Вы уверены, что хотите удалить этого пользователя?"
+      :action-accept="handleDelete"
+      :action-cancel="closeModal"/>
 </template>

@@ -1,37 +1,22 @@
 import { defineStore } from 'pinia';
 import axios from '../axios';
 import { useAuthStore } from './auth';
+import { useHandleLogStore } from "./handleLog.js";
 
 export const useGroupsStore = defineStore('groups', {
     state: () => ({
         groups: [],
         authStore: useAuthStore(),
-        errorMessage: '',
-        successMessage: '',
+        handleLog: useHandleLogStore(),
     }),
 
     actions: {
-        handleError(error) {
-            if (error.response) {
-                this.errorMessage = error.response.data.message || 'Something went wrong!';
-            } else if (error.request) {
-                this.errorMessage = 'No response from server. Please try again later.';
-            } else {
-                this.errorMessage = `Request error: ${error.message}`;
-            }
-        },
-
-        clearMessages() {
-            this.errorMessage = '';
-            this.successMessage = '';
-        },
 
         getAuthToken() {
             return `Bearer ${this.authStore.token}`;
         },
 
         async fetchGroupsByDirection(directionId) {
-            this.clearMessages();
             try {
                 const response = await axios.get(`/api/task_groups/direction/${directionId}`, {
                     headers: {
@@ -50,7 +35,6 @@ export const useGroupsStore = defineStore('groups', {
         },
 
         async addGroup(directionId, name, description) {
-            this.clearMessages();
             try {
                 const response = await axios.post(
                     `/api/task_groups`,
@@ -68,16 +52,15 @@ export const useGroupsStore = defineStore('groups', {
                     description,
                 });
 
-                this.successMessage = 'Group added successfully!';
+                this.handleLog.setSuccessMessage('Group added successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },
 
         async deleteGroup(groupId) {
-            this.clearMessages();
             try {
                 const response = await axios.delete(`/api/task_groups/${groupId}`, {
                     headers: {
@@ -87,17 +70,15 @@ export const useGroupsStore = defineStore('groups', {
 
                 this.groups = this.groups.filter((group) => group.id !== groupId);
 
-                this.successMessage = 'Group deleted successfully!';
+                this.handleLog.setSuccessMessage('Group deleted successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },
 
         async updateGroup(groupId, name, description) {
-            this.clearMessages();
-
             try {
                 const response = await axios.put(
                     `/api/task_groups/${groupId}`,
@@ -114,10 +95,10 @@ export const useGroupsStore = defineStore('groups', {
                     this.groups[groupIndex] = { ...this.groups[groupIndex], name, description };
                 }
 
-                this.successMessage = 'Group updated successfully!';
+                this.handleLog.setSuccessMessage('Group updated successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         }

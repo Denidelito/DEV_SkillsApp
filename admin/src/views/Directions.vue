@@ -4,15 +4,10 @@ import { useDirectionsStore } from '../stores/directions.js';
 import DirectionsList from "../components/DirectionsList.vue";
 
 const directionsStore = useDirectionsStore();
-const errorMessage = computed(() => directionsStore.errorMessage);
-const successMessage = computed(() => directionsStore.successMessage);
-
 const directionName = ref('');
 const directionDescription = ref('');
 
 const addDirection = async () => {
-  directionsStore.clearMessages();
-
   const response = await directionsStore.addDirection(
       directionName.value,
       directionDescription.value
@@ -38,7 +33,6 @@ const closeModal = () => {
   isModalOpen.value = false;
   directionName.value = '';
   directionDescription.value = '';
-  directionsStore.clearMessages();
 };
 </script>
 
@@ -55,9 +49,6 @@ const closeModal = () => {
           <label for="direction-description">Описание:</label>
           <textarea id="direction-description" v-model="directionDescription" required></textarea>
         </div>
-
-        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
 
         <button type="submit" class="button">Добавить</button>
         <button class="button button--secondary" type="button" @click="closeModal">Отмена</button>

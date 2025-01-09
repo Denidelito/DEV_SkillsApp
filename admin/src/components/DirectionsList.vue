@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { useDirectionsStore } from '../stores/directions.js';
+import ActionConfirm from "./forms/ActionConfirm.vue";
 
 const directionsStore = useDirectionsStore();
 const showDeleteModal = ref(false);
@@ -18,17 +19,8 @@ onMounted(async () => {
 
 const handleDelete = async () => {
   if (directionIdToDelete.value !== null) {
-    try {
-      await directionsStore.deleteDirection(directionIdToDelete.value);
-      directionsStore.successMessage = 'Направление успешно удалено.';
-      showDeleteModal.value = false;
-
-      setTimeout(() => {
-        directionsStore.successMessage = '';
-      }, 3000);
-    } catch (error) {
-      directionsStore.errorMessage = error.message;
-    }
+    await directionsStore.deleteDirection(directionIdToDelete.value);
+    showDeleteModal.value = false;
   }
 };
 
@@ -47,7 +39,6 @@ const handleEdit = async () => {
 };
 
 const openDeleteModal = (directionId) => {
-  directionsStore.clearMessages();
   directionIdToDelete.value = directionId;
   showDeleteModal.value = true;
 };
@@ -111,20 +102,11 @@ const closeModal = () => {
     <p v-else-if="!directionsStore.errorMessage">Нет доступных направлений.</p>
 
     <!-- Delete Modal -->
-    <div v-if="showDeleteModal" class="modal-overlay">
-      <div class="modal">
-        <h3>Подтвердите удаление</h3>
-        <p>Вы уверены, что хотите удалить это направление?</p>
-        <div class="modal-actions">
-          <button @click="handleDelete" class="button button--danger">
-            Да, удалить
-          </button>
-          <button @click="closeModal" class="button button--secondary">
-            Отмена
-          </button>
-        </div>
-      </div>
-    </div>
+    <ActionConfirm v-if="showDeleteModal"
+                   title="Подтвердите удаление"
+                   text="Вы уверены, что хотите удалить это направление?"
+                   :action-accept="handleDelete"
+                   :action-cancel="closeModal"/>
 
     <!-- Edit Modal -->
     <div v-if="showEditModal" class="modal-overlay">

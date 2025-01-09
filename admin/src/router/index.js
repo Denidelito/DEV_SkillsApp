@@ -40,19 +40,16 @@ const routes = [
             {
                 path: 'directions/:directionId/groups',
                 component: TaskGroups,
-                beforeEnter: requireAuth,
                 props: true,
             },
             {
                 path: 'directions/:directionId/groups/:taskGroupId',
                 component: TaskGroup,
-                beforeEnter: requireAuth,
                 props: true,
             },
             {
                 path: 'users/:userId/results',
                 component: UserResults,
-                beforeEnter: requireAuth,
                 props: true,
             },
         ],

@@ -1,30 +1,15 @@
 import { defineStore } from 'pinia';
 import axios from '../axios';
+import {useHandleLogStore} from "./handleLog.js";
 import { useAuthStore } from './auth';
 
 export const useUsersStore = defineStore('users', {
     state: () => ({
         users: [],
         authStore: useAuthStore(),
-        errorMessage: '',
-        successMessage: '',
+        handleLog: useHandleLogStore()
     }),
     actions: {
-        handleError(error) {
-            if (error.response) {
-                this.errorMessage = error.response.data.message || 'Request failed!';
-            } else if (error.request) {
-                this.errorMessage = 'No response from server. Please try again later.';
-            } else {
-                this.errorMessage = `Request error: ${error.message}`;
-            }
-        },
-
-        clearMessages() {
-            this.errorMessage = '';
-            this.successMessage = '';
-        },
-
         getAuthToken() {
             return `Bearer ${this.authStore.token}`;
         },
@@ -42,14 +27,12 @@ export const useUsersStore = defineStore('users', {
                     this.authStore.logout();
                     throw new Error('Session expired. Please log in again.');
                 } else {
-                    this.handleError(error);
+                    this.handleLog.handleError(error);
                 }
             }
         },
 
         async addUser(username, password, role) {
-            this.clearMessages();
-
             try {
                 const response = await axios.post(
                     '/api/users',
@@ -61,18 +44,16 @@ export const useUsersStore = defineStore('users', {
                     }
                 );
 
-                this.successMessage = 'User added successfully!';
+                this.handleLog.setSuccessMessage('User added successfully!');
                 await this.fetchUsers();
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },
 
         async deleteUser(userId) {
-            this.clearMessages();
-
             try {
                 const response = await axios.delete(`/api/users/${userId}`, {
                     headers: {
@@ -81,10 +62,10 @@ export const useUsersStore = defineStore('users', {
                 });
 
                 this.users = this.users.filter(user => user.id !== userId);
-                this.successMessage = 'User deleted successfully!';
+                this.handleLog.setSuccessMessage('User deleted successfully!');
                 return response.data;
             } catch (error) {
-                this.handleError(error);
+                this.handleLog.handleError(error);
                 return null;
             }
         },

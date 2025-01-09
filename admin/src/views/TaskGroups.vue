@@ -42,7 +42,6 @@ const closeModal = () => {
   isModalOpen.value = false;
   newGroupName.value = '';
   newGroupDescription.value = '';
-  groupsStore.clearMessages();
 };
 </script>
 
@@ -65,9 +64,6 @@ const closeModal = () => {
             <textarea id="group-description" v-model="newGroupDescription" required></textarea>
           </div>
 
-          <div v-if="groupsStore.errorMessage" class="error-message">{{ groupsStore.errorMessage }}</div>
-          <div v-if="groupsStore.successMessage" class="success-message">{{ groupsStore.successMessage }}</div>
-
           <button type="submit" class="button">Добавить</button>
           <button class="button button--secondary" type="button" @click="closeModal">Отмена</button>
         </form>
@@ -77,8 +73,6 @@ const closeModal = () => {
     <GroupList
         :directionId="directionId"
         :groups="groupsStore.groups"
-        :errorMessage="groupsStore.errorMessage"
-        :successMessage="groupsStore.successMessage"
         :onDeleteGroup="handleDeleteGroup"
         :onUpdateGroup="handleUpdateGroup"
     />

@@ -1,17 +1,3 @@
-<template>
-  <nav>
-    <ul class="breadcrumbs">
-      <li v-for="(breadcrumb, index) in filteredBreadcrumbs" :key="index">
-        <router-link v-if="index < filteredBreadcrumbs.length - 1" :to="breadcrumb.path">
-          {{ breadcrumb.name }}
-        </router-link>
-        <span v-else>{{ breadcrumb.name }}</span>
-        <span v-if="index < filteredBreadcrumbs.length - 1">/</span>
-      </li>
-    </ul>
-  </nav>
-</template>
-
 <script setup>
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
@@ -37,6 +23,20 @@ const breadcrumbs = computed(() => {
 // Убираем первую ссылку
 const filteredBreadcrumbs = computed(() => breadcrumbs.value.slice(1));
 </script>
+
+<template>
+  <nav>
+    <ul class="breadcrumbs">
+      <li v-for="(breadcrumb, index) in filteredBreadcrumbs" :key="index">
+        <router-link v-if="index < filteredBreadcrumbs.length - 1" :to="breadcrumb.path">
+          {{ breadcrumb.name }}
+        </router-link>
+        <span v-else>{{ breadcrumb.name }}</span>
+        <span v-if="index < filteredBreadcrumbs.length - 1">/</span>
+      </li>
+    </ul>
+  </nav>
+</template>
 
 <style scoped>
 .breadcrumbs {
