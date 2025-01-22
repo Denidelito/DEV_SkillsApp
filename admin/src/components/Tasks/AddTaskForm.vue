@@ -85,6 +85,13 @@ const setCorrectAnswer = (index) => {
             placeholder="url"
         />
       </div>
+      <div class="input">
+        <label for="question-text">Введите вопрос</label>
+        <textarea
+            id="question-text"
+            v-model="newTaskData.text"
+        ></textarea>
+      </div>
       <!-- Общее поле обратной связи -->
       <div class="input">
         <label for="feedback">Введите обратную связь (опционально)</label>
@@ -110,6 +117,15 @@ const setCorrectAnswer = (index) => {
 
     <!-- Форма для типа question-one -->
     <div v-if="taskType === 'question-one'">
+      <div class="input">
+        <label for="image-url">Ссылка на изображение</label>
+        <input
+            type="text"
+            id="image-url"
+            v-model="newTaskData.imageUrl"
+            placeholder="url"
+        />
+      </div>
       <div class="input">
         <label for="question-text">Введите вопрос</label>
         <textarea

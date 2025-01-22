@@ -29,6 +29,27 @@ export const useUserResultsStore = defineStore('userResults', {
             return `Bearer ${this.authStore.token}`;
         },
 
+        async fetchAllUserResults() {
+            this.clearMessages();
+
+            try {
+                const response = await axios.get('/api/userResults/all', {
+                    headers: {
+                        Authorization: this.getAuthToken(),
+                    },
+                });
+                this.userResults = response.data;
+
+            } catch (error) {
+                if (error.response && error.response.status === 401) {
+                    this.authStore.logout();
+                    throw new Error('Session expired. Please log in again.');
+                } else {
+                    this.handleError(error);
+                }
+            }
+        },
+
         async fetchUserResults(userId) {
             this.clearMessages();
 
@@ -54,7 +75,7 @@ export const useUserResultsStore = defineStore('userResults', {
 
             try {
                 const response = await axios.post(
-                    '/api/user-results',
+                    '/api/userResults/add',
                     { userId, taskGroupId, score },
                     {
                         headers: {
@@ -76,14 +97,36 @@ export const useUserResultsStore = defineStore('userResults', {
             this.clearMessages();
 
             try {
-                const response = await axios.delete(`/api/user-results/${resultId}`, {
+                const response = await axios.delete(`/api/userResults/${resultId}`, {
                     headers: {
                         Authorization: this.getAuthToken(),
                     },
                 });
 
-                this.userResults = this.userResults.filter(result => result.id !== resultId);
                 this.successMessage = 'Result deleted successfully!';
+                await this.fetchUserResults(userId);
+                return response.data;
+            } catch (error) {
+                this.handleError(error);
+                return null;
+            }
+        },
+
+        async updateUserResult(resultId, newScore, userId) {
+            this.clearMessages();
+
+            try {
+                const response = await axios.put(
+                    `/api/userResults/${resultId}`,
+                    { newScore },
+                    {
+                        headers: {
+                            Authorization: this.getAuthToken(),
+                        },
+                    }
+                );
+
+                this.successMessage = 'Result updated successfully!';
                 await this.fetchUserResults(userId);
                 return response.data;
             } catch (error) {

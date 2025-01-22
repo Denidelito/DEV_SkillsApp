@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import SvgIcon from "../components/SvgIcon.vue";
+import AppNav from "../components/AppNav.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -19,34 +20,41 @@ const goToHome = () => {
 </script>
 
 <template>
-  <div class="game-over">
-    <div class="game-over__result">
-      <div class="game-over__result-round">
-        <div class="game-over__result-title">Результат</div>
-        <div class="game-over__result-score">{{ score }}</div>
-      </div>
-      <div class="game-over__stats">
-        <div>Лучший результат: -</div>
-        <div>Дней подряд: -</div>
+  <div class="container">
+    <div class="game-over">
+      <div class="game-over__result">
+        <div class="game-over__result-round">
+          <div class="game-over__result-title">Результат</div>
+          <div class="game-over__result-score">{{ score }}</div>
+        </div>
+        <div class="game-over__stats">
+          <div class="game-over__stats-text">Лучший результат: -</div>
+          <div class="game-over__stats-text">Дней подряд: -</div>
+        </div>
+        <div class="game-over__nav">
+          <router-link class="button" :to="`/app/directions/${directionId}/groups/${taskGroupId}`">Повторить</router-link>
+        </div>
       </div>
     </div>
-    <nav>
-      <router-link class="button" :to="`/app/directions/${directionId}/groups/${taskGroupId}`">Заново</router-link>
-      <button class="button" @click="goToLeaderboard">Таблица лидеров</button>
-      <router-link class="button" to="/app/">На главную</router-link>
-    </nav>
+    <app-nav/>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
 .game-over {
+  padding: 32px 16px;
   &__result {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: -32px -16px 0 -16px;
-    padding: 60px 0 50px;
-    border-radius: 0 0 100px 100px;
-    background-color: var(--color-primary);
+    align-items: center;
+    gap: 30px;
     position: relative;
     &-round {
       display: flex;
@@ -55,6 +63,7 @@ const goToHome = () => {
       flex-direction: column;
       width: 210px;
       height: 210px;
+      padding: 25px;
       text-align: center;
       color: var(--color-primary);
       position: relative;
@@ -76,8 +85,6 @@ const goToHome = () => {
         border-radius: 50%;
         position: absolute;
         z-index: -2;
-        top: -25px;
-        left: -25px;
         background-color: var(--color-disable);
       }
     }
@@ -91,27 +98,31 @@ const goToHome = () => {
     }
   }
   &__stats {
-    width: calc(100% - 96px);
+    width: 100%;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
     gap: 20px;
-    font-size: 1.125rem;
-    color: #6B38E3;
-    padding: 35px 35px;
-    border-radius: 28px;
-    box-shadow: 0 4px 4px 0 rgba(50, 9, 147, 0.1);
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px 0 rgba(50, 9, 147, 0.1);
     background-color: white;
-    position: absolute;
+    margin-top: -80px;
     z-index: 3;
-    bottom: -52px;
+
+    &-text {
+      font-size: 20px;
+      font-family: var(--font-secondary), sans-serif;
+    }
   }
-}
-nav {
-  min-height: calc(100vh - 440px);
-  padding: 60px 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20px;
+  &__nav {
+    width: 100%;
+    box-sizing: border-box;
+    & > a {
+      width: 100%;
+      display: block;
+      box-sizing: border-box;
+    }
+  }
 }
 </style>

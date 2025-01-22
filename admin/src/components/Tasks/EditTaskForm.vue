@@ -55,6 +55,14 @@ const setCorrectAnswer = (index) => {
 
     <div v-if="props.task.task_data.type === 'pick-images'">
       <div class="input">
+        <label for="task-text">Введите описание</label>
+        <textarea
+            id="task-text"
+            v-model="editableTask.task_data.text"
+            placeholder="Enter task text"
+        ></textarea>
+      </div>
+      <div class="input">
         <label for="feedback">Обратная связь</label>
         <input
             id="feedback"

@@ -18,12 +18,14 @@
   -moz-osx-font-smoothing: grayscale;
 
   --color-primary: #6B38E3;
+  --color-secondary: #24252C;
   --color-error: #b00020;
   --color-disable: #CFBEF6;
+  --color-subtitle: #878490;
 
   --font-title: 'Unbounded';
   --font-primary: 'Unbounded';
-  --font-secondary: 'NunitoSans';
+  --font-secondary: 'Montserrat';
 }
 
 body {
@@ -31,17 +33,21 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
+  color: var(--color-secondary);
 }
 
 #app {
   box-sizing: border-box;
   max-width: 420px;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   color: #1E1E1E;
   background-color: #ffffff;
   margin: 0 auto;
-  padding: 2rem 1rem;
+}
+
+a {
+  text-decoration: none;
 }
 
 p {
@@ -51,7 +57,7 @@ p {
   margin: 0 0 1rem 0;
 }
 h1, h2, h3, h4, h5 {
-  color: var(--color-primary);
+  color: var(--color-secondary);
   font-family: var(--font-title), sans-serif;
   font-weight: 600;
   margin: 0 0 1rem;

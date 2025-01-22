@@ -2,62 +2,49 @@ const express = require('express');
 const router = express.Router();
 const UserResultsController = require('../../controllers/userResult');
 
-// Добавление нового результата
 router.post('/userResults/add', (req, res) => {
     const { userId, taskGroupId, score } = req.body;
 
-    console.log(userId, taskGroupId, score)
-    UserResultsController.addUserResult(userId, taskGroupId, score, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(201).json({ message: 'User result added successfully', result });
-    });
+    if (!userId || !taskGroupId || typeof score === 'undefined') {
+        return res.status(400).json({ error: 'Необходимо указать userId, taskGroupId и score' });
+    }
+
+    UserResultsController.addUserResult(req, res);
 });
 
-// Получение всех результатов
 router.get('/userResults/all', (req, res) => {
-    UserResultsController.getAllUserResults((err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(results);
-    });
+    UserResultsController.getAllUserResults(req, res);
 });
 
-// Получение результатов по user_id
 router.get('/userResults/user/:userId', (req, res) => {
-    const userId = req.params.userId;
+    const { userId } = req.params;
 
-    UserResultsController.getUserResultsByUserId(userId, (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json(results);
-    });
+    if (!userId) {
+        return res.status(400).json({ error: 'Не указан userId' });
+    }
+
+    UserResultsController.getUserResultsByUserId(req, res);
 });
 
-// Удаление результата по id
 router.delete('/userResults/:id', (req, res) => {
-    const id = req.params.id;
-    UserResultsController.deleteUserResultById(id, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json({ message: 'User result deleted successfully', result });
-    });
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).json({ error: 'Не указан id для удаления' });
+    }
+
+    UserResultsController.deleteUserResultById(req, res);
 });
 
-// Обновление результата пользователя по id
 router.put('/userResults/:id', (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
     const { newScore } = req.body;
-    UserResultsController.updateUserResultById(id, newScore, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(200).json({ message: 'User result updated successfully', result });
-    });
+
+    if (!id || typeof newScore === 'undefined') {
+        return res.status(400).json({ error: 'Необходимо указать id и newScore' });
+    }
+
+    UserResultsController.updateUserResultById(req, res);
 });
 
 module.exports = router;

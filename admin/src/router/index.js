@@ -8,6 +8,7 @@ import TaskGroups from "../views/TaskGroups.vue";
 import TaskGroup from "../views/Tasks.vue";
 import UserResults from "../views/UserResults.vue";
 import FileManager from "../views/FileManager.vue";
+import AllResults from "../views/AllResults.vue";
 
 
 const requireAuth = (to, from, next) => {
@@ -54,8 +55,13 @@ const routes = [
                 props: true,
             },
             {
-                path: 'file',
+                path: 'files',
                 component: FileManager,
+                props: true,
+            },
+            {
+                path: 'results',
+                component: AllResults,
                 props: true,
             },
         ],

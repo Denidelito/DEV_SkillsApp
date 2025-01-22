@@ -22,6 +22,7 @@ export const useFilesStore = defineStore('files', {
                         Authorization: this.getAuthToken(),
                     },
                 });
+                console.log(response.data)
                 this.files = response.data;
             } catch (error) {
                 if (error.response && error.response.status === 401) {

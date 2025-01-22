@@ -18,6 +18,18 @@ const route = useRoute();
     >
       Направления
     </router-link>
+    <router-link
+        to="/admin/results"
+        :class="{ 'router-link-active': route.path.startsWith('/admin/allResults') }"
+    >
+      Результаты
+    </router-link>
+    <router-link
+        to="/admin/files"
+        :class="{ 'router-link-active': route.path.startsWith('/admin/files') }"
+    >
+      Файлы
+    </router-link>
   </div>
 </template>
 

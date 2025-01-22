@@ -1,36 +1,8 @@
-<template>
-  <div class="file-manager">
-    <h2>Управление файлами</h2>
-
-    <!-- Загрузка нового файла -->
-    <div class="file-upload">
-      <label for="fileInput">Добавить файл:</label>
-      <input id="fileInput" type="file" @change="handleFileUpload" />
-    </div>
-
-    <!-- Вывод списка файлов -->
-    <div v-if="files.length > 0" class="file-list">
-      <h3>Список файлов</h3>
-      <ul>
-        <li v-for="file in files" :key="file.id" class="file-item">
-          <a :href="file.filePath" target="_blank">{{ file.originalName }}</a>
-          <button @click="deleteFile(file.id)">Удалить</button>
-        </li>
-      </ul>
-    </div>
-
-    <p v-else>Файлы отсутствуют.</p>
-  </div>
-</template>
-
 <script setup>
 import { onMounted } from 'vue';
 import { useFilesStore } from '../stores/files';
 
 const filesStore = useFilesStore();
-
-// Список файлов из состояния store
-const files = filesStore.files;
 
 // Загружаем список файлов при монтировании компонента
 const loadFiles = async () => {
@@ -56,41 +28,75 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-.file-manager {
-  padding: 20px;
-}
+<template>
+  <div class="file-manager">
+    <h3>Список файлов</h3>
+    <div class="file-list">
+      <!-- Загрузка нового файла -->
+      <div class="file-upload">
+        <label for="fileInput">Добавить файл +</label>
+        <input id="fileInput" type="file" @change="handleFileUpload" />
+      </div>
+      <div v-if="filesStore.files.length > 0" v-for="file in filesStore.files" :key="file.id" class="file-item">
+        <a :href="'https://gamequests.ru/'+file.file_path" target="_blank">
+          <img :src="'https://gamequests.ru/'+file.file_path" :alt="file.file_name">
+        </a>
+        <div class="file-item__nav">
+          <button @click="deleteFile(file.id)">Удалить</button>
+        </div>
+      </div>
+      <div class="file-item" v-else>Файлы отсутствуют.</div>
+    </div>
 
-.file-upload {
-  margin-bottom: 20px;
-}
 
-.file-list {
-  margin-top: 20px;
-}
+  </div>
+</template>
 
-.file-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
+<style scoped lang="scss">
+.file {
+  &-list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+  }
 
-.file-item a {
-  margin-right: 10px;
-  color: #007bff;
-  text-decoration: none;
-}
+  &-upload {
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width:100%;
+      height: 200px;
+      border-radius: 16px;
+      border: 2px solid #0056b3;
+      cursor: pointer;
+    }
 
-.file-item button {
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
+    input {
+      display: none;
+    }
+  }
 
-.file-item button:hover {
-  background-color: #ff7875;
+  &-item {
+    overflow: hidden;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 16px;
+    border: 2px solid #0056b3;
+    line-height: 0;
+
+    &__nav {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    img {
+      line-height: 0;
+      height: 200px;
+    }
+  }
 }
 </style>

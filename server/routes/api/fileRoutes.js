@@ -1,6 +1,7 @@
+// Роутер
 const express = require('express');
 const router = express.Router();
-const upload = require('../../utils/fileUpload');
+const { upload } = require('../../utils/fileUtils'); // Путь к утилите
 const { uploadFile, getAllFiles, deleteFileById } = require('../../controllers/fileController');
 
 // Маршрут для загрузки файла

@@ -2,6 +2,8 @@
 import { onMounted } from 'vue';
 import { useDirectionsStore } from '../stores/directions';
 import SvgIcon from "../components/SvgIcon.vue";
+import AppNav from "../components/AppNav.vue";
+import AppHeader from "../components/AppHeader.vue";
 
 const directionsStore = useDirectionsStore();
 
@@ -13,26 +15,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <header>
-      <div>
-
-      </div>
-      <div>
-        <svg-icon name="stats" width="45" height="45"/>
-      </div>
-    </header>
-    <h3>Направления</h3>
-    <hr>
+  <div class="container">
+    <app-header/>
     <div class="direction-tabs">
-<!--      <div class="direction-tab" v-for="direction in directionsStore.directions" :key="direction.id">
-        <router-link class="direction-link" :to="`/directions/${direction.id}/groups`">
-          <span class="direction-link__icon">
-            <svg-icon width="30" height="30" name="food"/>
-          </span>
-          <span class="direction-link__text">{{ direction.name }}</span>
-        </router-link>
-      </div>-->
       <router-link class="direction-link direction-link_green" to="/app/directions/6/groups">
         <span class="direction-link__icon">
             <svg-icon width="30" height="30" name="food"/>
@@ -52,13 +37,22 @@ onMounted(() => {
         <span class="direction-link__text">Ретушь</span>
       </router-link>
     </div>
+    <app-nav/>
   </div>
 </template>
 
 <style scoped lang="scss">
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
 .direction {
   &-tabs {
-    padding-top: 30px;
+    height: 100vh;
+    padding: 0 16px;
+    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -67,15 +61,17 @@ onMounted(() => {
   &-link {
     display: flex;
     align-items: center;
+    overflow: hidden;
     gap: 20px;
-    border-radius: 20px;
+    border-radius: 10px;
     text-decoration: none;
     border: 2px solid var(--color-primary);
 
     &__text {
-      font-family: var(--font-primary), sans-serif;
-      font-weight: 700;
-      color: #1E1E1E;
+      font-family: var(--font-secondary), sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--color-secondary);
     }
 
     &__icon {
@@ -83,7 +79,6 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       position: relative;
-      border-radius: 15px 0 0 15px;
       padding: 10px;
       background-color: var(--color-primary);
       line-height: 0;

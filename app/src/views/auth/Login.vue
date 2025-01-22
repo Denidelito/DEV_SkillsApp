@@ -15,23 +15,37 @@ const handleLogin = async () => {
 
 <template>
   <div class="form-login">
-    <picture>
-      <img width="301" height="301" src="../../assets/images/character.png" alt="Картинка выдры">
-    </picture>
-    <h3>Добро пожаловать!</h3>
-    <p>Авторизуйтесь для входа в приложение</p>
-    <form class="form" @submit.prevent="handleLogin">
-      <div class="input-container">
-        <input placeholder="Введите логин staff" id="username" v-model="username" type="text" required />
-      </div>
-      <button class="button" type="submit">Войти</button>
-    </form>
-    <p v-if="authStore.error" style="color: red">{{ authStore.error }}</p>
+    <div>
+      <picture>
+        <img width="301" height="301" src="../../assets/images/character.png" alt="Картинка выдры">
+      </picture>
+      <h3>Добро пожаловать!</h3>
+      <p class="subtitle">Авторизуйтесь для входа в приложение</p>
+    </div>
+    <div>
+      <form class="form" @submit.prevent="handleLogin">
+        <div class="input-container">
+          <input placeholder="Введите логин staff" id="username" v-model="username" type="text" required />
+        </div>
+        <button class="button" type="submit">Войти</button>
+      </form>
+      <p v-if="authStore.error" style="color: red">{{ authStore.error }}</p>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
   .form-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    box-sizing: border-box;
     text-align: center;
+    padding: 30px 16px;
+  }
+
+  .subtitle {
+    color: var(--color-subtitle);
   }
 </style>

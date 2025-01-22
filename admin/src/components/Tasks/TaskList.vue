@@ -34,10 +34,12 @@ const startEditingTask = (task) => {
     <hr>
     <div v-if="task.task_data.type === 'pick-images'">
       <img width="200" :src="task.task_data.imageUrl" alt="">
+      <p v-if="task.task_data.text"> <strong>Вопрос:</strong> {{task.task_data.text}}</p>
       <p><strong>Обратная связь:</strong> {{task.task_data.feedback}}</p>
       <p><strong>Проходит модерацию: </strong>{{task.task_data.answer === 'true' ? 'Да' : 'Нет' }}</p>
     </div>
     <div v-else>
+      <img :if="task.task_data.imageUrl" width="200" :src="task.task_data.imageUrl" alt="">
       <p><strong>Вопрос:</strong> {{task.task_data.text}}</p>
       <p><strong>Обратная связь:</strong> {{task.task_data.feedback}}</p>
       <p><strong>Ответы:</strong></p>

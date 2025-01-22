@@ -1,6 +1,24 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useUserResultsStore } from '../stores/userResults';
+import {useRoute, useRouter} from 'vue-router';
+
+const route = useRoute();
+
+const userId = ref(route.params.userId);
+const userResults = ref([]);
+const store = useUserResultsStore();
+
+onMounted(async () => {
+  await store.fetchUserResults(userId.value);
+  userResults.value = store.userResults.data;
+});
+</script>
+
 <template>
   <div>
     <h1>Результаты пользователя</h1>
+
     <table class="table" v-if="userResults.length">
       <thead>
       <tr>
@@ -20,20 +38,3 @@
     <p v-else>Нет результатов.</p>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted } from 'vue';
-import { useUserResultsStore } from '../stores/userResults';
-import {useRoute, useRouter} from 'vue-router';
-
-const route = useRoute();
-
-const userId = ref(route.params.userId);
-const userResults = ref([]);
-const store = useUserResultsStore();
-
-onMounted(async () => {
-  await store.fetchUserResults(userId.value);
-  userResults.value = store.userResults;
-});
-</script>

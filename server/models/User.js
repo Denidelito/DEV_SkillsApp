@@ -63,18 +63,27 @@ class User {
     }
 
     static deleteUser(userId, callback) {
-        const query = 'DELETE FROM users WHERE id = ?';
-
-        db.query(query, [userId], (err, results) => {
+        const deleteResultsQuery = 'DELETE FROM user_results WHERE user_id = ?';
+        db.query(deleteResultsQuery, [userId], (err, result) => {
             if (err) {
                 return callback(err, null);
             }
-            if (results.affectedRows === 0) {
-                return callback(new Error('User not found'), null);
-            }
-            callback(null, results);
+
+            const deleteUserQuery = 'DELETE FROM users WHERE id = ?';
+            db.query(deleteUserQuery, [userId], (err, result) => {
+                if (err) {
+                    return callback(err, null);
+                }
+
+                if (result.affectedRows === 0) {
+                    return callback(new Error('User not found'), null);
+                }
+
+                callback(null, { message: 'User and related results deleted successfully' });
+            });
         });
     }
+
 }
 
 module.exports = User;
